@@ -1,0 +1,99 @@
+rm(list = ls())
+
+# Packages
+library(readxl) ; library(tidyverse) ; library(viridis) ; library(hrbrthemes) ; 
+library(mapdata) ; library(leaflet)
+# Functions
+`%notin%` <- Negate(`%in%`)
+
+# Load Datasets
+# Dataset Mortality from Massimo Ponti et al.
+MME_Mortality <- read_excel("Data/MME-Review data.xlsx", 
+                            sheet = "MME2015-2019 cleaned", 
+                            col_types = c("numeric", "text", "date", "date", "numeric", "text", 
+                                          "numeric", "text", "text", "text", "text", "numeric", 
+                                          "numeric", "numeric", "numeric", "text", "text", "text", 
+                                          "numeric", "numeric", "text", "numeric", "text", "text", 
+                                          "numeric", "text", "text", "numeric", "numeric", 
+                                          "numeric", "numeric", "text", "numeric", "numeric", 
+                                          "text", "text", "text", "text", "numeric", "text", 
+                                          "numeric", "text", "text", "text", "numeric", "numeric",
+                                          "numeric", "numeric", "text", "text", "text", "text", 
+                                          "text", "text", "text", "text", "text", "text", "text", 
+                                          "text", "text", "text", "text", "text"))
+# Dataset Functional traits from Nuria Teixido et al.
+species_traits <- read_excel("Data/species_traits.xlsx", 
+                             sheet = "species.clean", 
+                             col_types = c("text", "text", "text", "text", "text", "text", "text", 
+                                           "text", "text", "text", "text", "text", "text", "text"))
+
+# Be sure that we have dataset w/ mortality only
+MME_Mortality <- MME_Mortality %>% drop_na(., `Damaged percentage`)
+# Look at the species into the dataset
+species_MMEs       <- MME_Mortality %>% arrange(Species) %>% distinct(Species)
+species_Fctl       <- species_traits %>% arrange(species) %>% distinct(species)
+# Species mismatch
+Species_mismatch   <- species_MMEs$Species[species_MMEs$Species %notin% species_Fctl$species]
+
+# Remove the 4 missing species so far
+MME_Mortality      <- MME_Mortality %>% filter(Species %notin% Species_mismatch)
+
+# Plot the % damaged
+mybins    = c(1,5,10,25,50,75,80,90,100)
+mypalette = colorBin(palette="YlOrBr", 
+                     domain=unique(MME_Mortality$`Damaged percentage`), 
+                     na.color="transparent", 
+                     bins=mybins)
+
+# Huge effort w/ Pinna nobilis
+Figure_1 <- MME_Mortality %>% 
+leaflet() %>% 
+  addTiles() %>% 
+  setView(lat = 40, lng = 18 , zoom = 4) %>%
+  addProviderTiles("Esri.WorldImagery") %>%
+  addCircles(~Longitude, ~Latitude,  
+             fillColor = ~mypalette(`Damaged percentage`), 
+             fillOpacity = 0.5, color = "white", radius = ~sqrt(`Damaged percentage`)*3000, 
+             stroke=FALSE, weight = 1,) %>%
+  addLegend( pal=mypalette, values=~`Damaged percentage`, opacity=0.9, title = "Damaged due to MMEs (%)", 
+             position = "topright" )
+
+Figure_2 <- MME_Mortality %>% filter(., Species != "Pinna nobilis") %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  setView(lat = 40, lng = 18 , zoom = 4) %>%
+  addProviderTiles("Esri.WorldImagery") %>%
+  addCircles(~Longitude, ~Latitude,  
+             fillColor = ~mypalette(`Damaged percentage`), 
+             fillOpacity = 0.5, color = "white", radius = ~sqrt(`Damaged percentage`)*3000, 
+             stroke=FALSE, weight = 1,) %>%
+  addLegend( pal=mypalette, values=~`Damaged percentage`, opacity=0.9, title = "Damaged due to MMEs (%)", 
+             position = "topright" )
+
+# Work with cell 1° x 1°
+Occurence <- MME_Mortality %>%
+     mutate(Longitude = round(Longitude, 1)) %>%
+     mutate(Latitude = round(Latitude, 1)) %>%
+     group_by(Latitude, Longitude, Country, Species) %>%
+     summarise(`Damaged percentage` = mean(`Damaged percentage`)) 
+
+Occurence_species_per_cell <- Occurence %>% 
+  mutate(Longitude = round(Longitude, 0)) %>%
+  mutate(Latitude = round(Latitude, 0)) %>%
+  group_by(Latitude, Longitude, Species) %>% 
+  summarise(`Damaged percentage`  = mean(`Damaged percentage`))
+
+# Functioning
+tr_cat = data.frame(trait_name = colnames(species_traits[2:10]),
+                    trait_type = c("N", "N", "N", "N", "N", "N", "N", "N", "N"),
+                    fuzzy_name = rep(NA, 9))
+sp_tr  = species_traits %>% column_to_rownames("species") %>% dplyr::select(., 1:9)
+sp_tr  = sp_tr %>% dplyr::mutate_all(as.factor)
+sp_to_fe <- mFD::sp.to.fe(sp_tr = sp_tr, tr_cat = tr_cat) 
+fe_nm <- unique(sp_to_fe$fe_nm) ; length(fe_nm) # 34 FE
+
+# List of species in each FE
+fe_sp <- list() ; for (k in fe_nm) {fe_sp[[k]]<-names(sp_to_fe$sp_fe[which(sp_to_fe$sp_fe==k)])}
+
+# Trait values of FE
+fe_tr <- sp_to_fe$fe_tr
