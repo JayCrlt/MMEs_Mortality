@@ -1,12 +1,12 @@
 rm(list = ls())
 
-# Packages
+## Packages
 library(readxl) ; library(tidyverse) ; library(viridis) ; library(hrbrthemes) ; 
 library(mapdata) ; library(leaflet)
-# Functions
+## Functions
 `%notin%` <- Negate(`%in%`)
 
-# Load Datasets
+## Load Datasets
 # Dataset Mortality from Massimo Ponti et al.
 MME_Mortality <- read_excel("Data/MME-Review data.xlsx", 
                             sheet = "MME2015-2019 cleaned", 
@@ -21,12 +21,61 @@ MME_Mortality <- read_excel("Data/MME-Review data.xlsx",
                                           "numeric", "numeric", "text", "text", "text", "text", 
                                           "text", "text", "text", "text", "text", "text", "text", 
                                           "text", "text", "text", "text", "text"))
+
 # Dataset Functional traits from Nuria Teixido et al.
 species_traits <- read_excel("Data/species_traits.xlsx", 
-                             sheet = "species.clean", 
-                             col_types = c("text", "text", "text", "text", "text", "text", "text", 
-                                           "text", "text", "text", "text", "text", "text", "text"))
+                             sheet = "4_species_traits_clean.v2", 
+                             col_types = c("text", "text", "text", "text", "text", "text", "text", "text", 
+                                           "text", "text", "text", "text", "text", "text", "text", "text"))
 
+## Unravel the missing species to code
+# Dataset Mortality from Massimo Ponti et al.
+MME_Merged_data <- read_excel("Data/MME-Review data.xlsx", 
+                              sheet = "Merged datasets",
+                              col_types = c("numeric", "text", "date", "date", "numeric", "text", "text", 
+                                            "text", "text", "text", "text", "numeric", "numeric", "numeric", 
+                                            "numeric", "text", "text", "text", "text", "numeric", "text", 
+                                            "numeric", "text", "text", "text", "text", "text", "numeric", 
+                                            "numeric", "numeric", "numeric", "text", "numeric", "numeric"))
+# Extract species
+all_species    = unique(MME_Merged_data$species)
+species_subset = unique(species_traits$species)
+# Dataset w/ missing species
+data_species_to_add <- data.frame(species     = all_species[all_species %notin% species_subset],
+                                  Keep_or_rmv = c("Y", "Y", "Y", "Y", "N", "Y", "N", "Y", "Y", "N", 
+                                                  "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "N", "Y", "Y", "Y", 
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", 
+                                                  "Y", "Y", "Y", "Y", "Y", "N", "N", "N", "N", "Y",
+                                                  "Y", "N", "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", 
+                                                  "Y", "Y", "Y", "N", "Y", "N", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "N", "N", "N", "N", "N", "N"),
+                                  ID_sp_lvl   = c("Y", "N", "Y", "Y", "N", "N", "N", "N", "N", "N", 
+                                                  "N", "Y", "Y", "Y", "Y", "N", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "N", "Y", "Y", "N", "Y", "Y", "Y", 
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", 
+                                                  "Y", "Y", "Y", "N", "Y", "Y", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "N", "Y", "N", "Y", 
+                                                  "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
+                                                  "Y", "Y", "Y", "Y", "Y", "N", "N", "N", "N")) %>% 
+  arrange(Keep_or_rmv, ID_sp_lvl, species)
+# Filtering only benthic species
+data_species_to_add_w_sp_ID     = data_species_to_add %>% filter(Keep_or_rmv == "Y", ID_sp_lvl == "Y") %>% 
+  select(species) %>% as.vector()
+data_species_to_add_additional  = data_species_to_add %>% filter(Keep_or_rmv == "Y", ID_sp_lvl == "N") %>% 
+  select(species) %>% as.vector()
+data_species_to_add_w_sp_ID$species[data_species_to_add_w_sp_ID$species == "Epizoanthus  arenaceus"] = 
+  "Epizoanthus arenaceus"
+data_species_to_add %>% filter(Keep_or_rmv == "N", ID_sp_lvl == "N") %>% 
+  select(species) %>% as.vector()
+
+# Missing Species
+(data_species_to_add_w_sp_ID    = data_species_to_add_w_sp_ID$species)
+(data_species_to_add_additional = data_species_to_add_additional$species)
+
+## Define the FE number
 # Be sure that we have dataset w/ mortality only
 MME_Mortality <- MME_Mortality %>% drop_na(., `Damaged percentage`)
 # Look at the species into the dataset
@@ -84,13 +133,13 @@ Occurence_species_per_cell <- Occurence %>%
   summarise(`Damaged percentage`  = mean(`Damaged percentage`))
 
 # Functioning
-tr_cat = data.frame(trait_name = colnames(species_traits[2:10]),
-                    trait_type = c("N", "N", "N", "N", "N", "N", "N", "N", "N"),
-                    fuzzy_name = rep(NA, 9))
-sp_tr  = species_traits %>% column_to_rownames("species") %>% dplyr::select(., 1:9)
+tr_cat = data.frame(trait_name = colnames(species_traits[2:12]),
+                    trait_type = c("N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N"),
+                    fuzzy_name = rep(NA, 11))
+sp_tr  = species_traits %>% column_to_rownames("species") %>% dplyr::select(., 1:11)
 sp_tr  = sp_tr %>% dplyr::mutate_all(as.factor)
 sp_to_fe <- mFD::sp.to.fe(sp_tr = sp_tr, tr_cat = tr_cat) 
-fe_nm <- unique(sp_to_fe$fe_nm) ; length(fe_nm) # 34 FE
+fe_nm <- unique(sp_to_fe$fe_nm) ; length(fe_nm) # 58 FE
 
 # List of species in each FE
 fe_sp <- list() ; for (k in fe_nm) {fe_sp[[k]]<-names(sp_to_fe$sp_fe[which(sp_to_fe$sp_fe==k)])}
