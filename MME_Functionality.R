@@ -85,7 +85,7 @@ data_species_to_add_w_sp_ID$species[data_species_to_add_w_sp_ID$species == "Epiz
 
 ## Write down all missing species into a xlsx file
 data_xlsx_species_to_add        <- c(data_species_to_add_w_sp_ID, data_species_to_add_additional)
-xlsx::write.xlsx(data_xlsx_species_to_add, file = "data_xlsx_species_to_add.xlsx")
+xlsx::write.xlsx(data_xlsx_species_to_add, file = "Data/data_xlsx_species_to_add.xlsx")
 
 # 2️⃣ Visualize the damaged sites 💥 ----
 ## Set the leaflet parameters
