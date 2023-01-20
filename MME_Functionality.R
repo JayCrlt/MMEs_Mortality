@@ -3,11 +3,22 @@ rm(list = ls()) ; options(warn = -1)
 # 0️⃣ Set the environment 💻 ----
 
 ## Packages
-library(readxl) ; library(tidyverse) ; library(viridis) ; library(hrbrthemes) ; library(rgdal) 
-library(mapdata) ; library(leaflet) ; library(sf) ; library(rnaturalearth) ; library(rgeos)
-library(rnaturalearthdata)  ; library(ggspatial) ; library(scales) ; library(patchwork)
+library(rnaturalearthdata)  
+library(rnaturalearth) 
+library(hrbrthemes) 
+library(tidyverse) 
+library(ggspatial) 
+library(patchwork)
+library(mapdata) 
+library(leaflet) 
+library(viridis) 
+library(readxl) 
+library(scales) 
+library(rgeos)
+library(rgdal) 
+library(sf) 
 
-## Functions and shp.
+## Functions and shapefiles
 `%notin%` <- Negate(`%in%`)
 world     <- ne_countries(scale = "medium", returnclass = "sf")
 
@@ -87,7 +98,7 @@ data_species_to_add_w_sp_ID$species[data_species_to_add_w_sp_ID$species == "Epiz
 data_xlsx_species_to_add        <- c(data_species_to_add_w_sp_ID, data_species_to_add_additional)
 xlsx::write.xlsx(data_xlsx_species_to_add, file = "Data/data_xlsx_species_to_add.xlsx")
 
-# 2️⃣ Visualize the damaged sites 💥 ----
+# 2️⃣ Visualize raw data 💥 ----
 ## Set the leaflet parameters
 mybins    <- c(1,5,10,25,50,75,80,90,100)
 mypalette <- colorBin(palette="YlOrBr", 
@@ -198,11 +209,11 @@ grid_dataset <- grid_dataset %>% st_set_crs("+proj=longlat +datum=WGS84 +no_defs
 ## Extract statistics
 species_affected <- grid_dataset %>% group_by(x, Species) %>% summarise(occurence = n()) %>% group_by(x) %>% summarise(`number of taxa` = n())
 FEs_affected     <- grid_dataset %>% group_by(x, FEs) %>% summarise(occurence = n()) %>% group_by(x) %>% summarise(`number of FEs` = n())
-dammaged_cell    <- grid_dataset %>% group_by(x, Species) %>% summarise(dammaged = mean(Damaged.percentage)) %>% group_by(x) %>% summarise(`% of dammage` = mean(dammaged))
+dammaged_cell    <- grid_dataset %>% group_by(x, Species) %>% summarise(dammaged = mean(Damaged.percentage)) %>% group_by(x) %>% summarise(`% of damage` = mean(dammaged))
 
 ## Build the maps with 1° cells
 ### Number of taxas affected
-Med_spp <- ggplot(data = world) +
+Med_spp  <- ggplot(data = world) +
   geom_sf(data = species_affected, shape = 4, aes(fill = `number of taxa`), col = "black", size = 5) +
   geom_sf(color = "black", fill = "light grey") +
   scale_fill_gradient(low = "white", high = "red") +
@@ -212,7 +223,7 @@ Med_spp <- ggplot(data = world) +
   theme(panel.grid.major = element_line(color = gray(.25), linetype = "blank", size = 0.2), panel.background = element_rect(fill = "light blue"))
 
 ### Number of FEs affected
-Med_FEs <- ggplot(data = world) +
+Med_FEs  <- ggplot(data = world) +
   geom_sf(data = FEs_affected, shape = 4, aes(fill = `number of FEs`), col = "black", size = 5) +
   geom_sf(color = "black", fill = "light grey") +
   scale_fill_gradient(low = "white", high = "red") +
@@ -222,19 +233,39 @@ Med_FEs <- ggplot(data = world) +
   theme(panel.grid.major = element_line(color = gray(.25), linetype = "blank", size = 0.2), panel.background = element_rect(fill = "light blue"))
 
 ### % of dammaged
-Med_dam <- ggplot(data = world) +
-  geom_sf(data = dammaged_cell, shape = 4, aes(fill = `% of dammage`), col = "black", size = 5) +
+Med_dam  <- ggplot(data = world) +
+  geom_sf(data = dammaged_cell, shape = 4, aes(fill = `% of damage`), col = "black", size = 5) +
   geom_sf(color = "black", fill = "light grey") +
   scale_fill_gradient(low = "white", high = "red") +
   xlab("Longitude") + ylab("Latitude") +
   coord_sf(xlim = c(-10, 40), ylim = c(30, 45), expand = FALSE) +
-  ggtitle("Percentage of dammage") +
+  ggtitle("Average percentage of damage") +
   theme(panel.grid.major = element_line(color = gray(.25), linetype = "blank", size = 0.2), panel.background = element_rect(fill = "light blue"))
 
 ## Global map
-Figure_3 = Med_dam / Med_spp / Med_FEs
+Figure_3 <- Med_dam / Med_spp / Med_FEs
 
 # 5️⃣ Functional hypervolume 🛑 ----
+
+## Split the dataset into categories
+grid_dataset$Damaged.qualitative[grid_dataset$Damaged.qualitative == "moderate"] = "Moderate"
+data_ID_Cell       <- data.frame(x       = unique(paste(grid_dataset$lon_rounded_0, grid_dataset$lon_rounded_1, 
+                                                        grid_dataset$lat_rounded_0, grid_dataset$lat_rounded_1, sep = "_")),
+                                 ID_Cell = paste("Cell_",seq(1, length(unique(grid_dataset$x)), 1), sep = ""))
+grid_dataset$rect  <- paste(grid_dataset$lon_rounded_0, grid_dataset$lon_rounded_1, 
+                            grid_dataset$lat_rounded_0, grid_dataset$lat_rounded_1, sep = "_")
+grid_dataset       <- merge(data_ID_Cell, grid_dataset, by.x = "x", by.y = "rect")
+FE_dataset         <- grid_dataset %>% mutate(ID = paste(grid_dataset$ID_Cell, 
+                                                         grid_dataset$Damaged.qualitative, sep = "_"))
+
+FE_matrix          <- FE_dataset %>% group_by(ID, FEs) %>% summarise(occurence = n())
+FE_matrix          <- reshape2::acast(FE_matrix, ID~FEs, value.var = "occurence")
+
+## Convert in Presence absence
+FE_matrix[is.na(FE_matrix)] <- 0
+FE_matrix[FE_matrix > 0]    <- 1
+
+
 
 # 6️⃣ Figures 📊 ----
 
