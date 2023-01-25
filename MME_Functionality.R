@@ -265,7 +265,90 @@ FE_matrix          <- reshape2::acast(FE_matrix, ID~FEs, value.var = "occurence"
 FE_matrix[is.na(FE_matrix)] <- 0
 FE_matrix[FE_matrix > 0]    <- 1
 
+# computing Gower distance between FEs
+library(mFD)
+fe_fe_dist <- funct.dist(fe_tr, tr_cat[,-3], metric = "gower")
+fe_fspaces <- quality.fspaces(sp_dist = fe_fe_dist)
+# Looking for how many axes
+print(round(fe_fspaces$quality_fspaces,3)) # > 6 dimensions
+fe_6D_coord <- fe_fspaces$details_fspaces$sp_pc_coord[,1:6]
 
+quadrats_multidimFD <- alpha.fd.multidim(sp_faxes_coord   = fe_6D_coord, 
+                                         asb_sp_w         = FE_matrix, 
+                                         ind_vect         = c("fdis", "fide", "fspe", "fori"), 
+                                         scaling          = TRUE, 
+                                         details_returned = TRUE)
+quadrats_taxo_hill  <- alpha.fd.hill(asb_sp_w         = FE_matrix, 
+                                     sp_dist          = fe_fe_dist, 
+                                     q                = c(0,1), 
+                                     tau              = "min", 
+                                     details_returned = FALSE)
+colnames(quadrats_taxo_hill) <- c("FE_richness", "FE_shannon")
+quadrats_funct_hill <- alpha.fd.hill(asb_sp_w         = FE_matrix, 
+                                     sp_dist          = fe_fe_dist, 
+                                     q                = 1, 
+                                     tau              = "min", 
+                                     details_returned = FALSE)
+
+# Merging all diversity indices with quadrats info
+quadrats_biodiv     <- data.frame(Nb_sp         = quadrats_multidimFD$functional_diversity_indices[,1], 
+                                  Impact_damage = sub("^[^_]*_", "", sub("^[^_]*_", "", rownames(quadrats_biodiv))),
+                                  quadrats_taxo_hill, 
+                                  quadrats_funct_hill, 
+                                  quadrats_multidimFD$functional_diversity_indices[,-1]) 
+
+habcat = FE_matrix %>% data.frame() %>% mutate_if(is.character,as.numeric) %>% 
+  mutate(cat = quadrats_biodiv$Impact_damage) %>% group_by(cat) %>% 
+  summarise_all(sum)
+
+FEs_cat_dataset = t(habcat) %>% data.frame() %>% janitor::row_to_names(row_number = 1) %>% 
+  rownames_to_column(var = "FEs")
+# Coordinates of all species
+pool_coord   <- quadrats_multidimFD$details$sp_faxes_coord %>% data.frame() %>% 
+  rownames_to_column(var = "FEs")
+
+FEs_cat_dataset = merge(FEs_cat_dataset, pool_coord, by = 'FEs')
+FEs_cat_dataset$Low = as.numeric(FEs_cat_dataset$Low)
+FEs_cat_dataset$Moderate = as.numeric(FEs_cat_dataset$Moderate)
+FEs_cat_dataset$Severe = as.numeric(FEs_cat_dataset$Severe)
+FEs_cat_dataset_Low = FEs_cat_dataset %>% filter(Low > 0) %>% dplyr::select(-c(Moderate, Severe))
+FEs_cat_dataset_Mod = FEs_cat_dataset %>% filter(Moderate > 0) %>% dplyr::select(-c(Low, Severe))
+FEs_cat_dataset_Sev = FEs_cat_dataset %>% filter(Severe > 0) %>% dplyr::select(-c(Low, Moderate))
+
+conv_hull_tot = FEs_cat_dataset %>%  slice(chull(PC1, PC2))
+conv_hull_low = FEs_cat_dataset_Low %>%  slice(chull(PC1, PC2))
+conv_hull_mod = FEs_cat_dataset_Mod %>%  slice(chull(PC1, PC2))
+conv_hull_sev = FEs_cat_dataset_Sev %>%  slice(chull(PC1, PC2))
+
+# Figure Polygons regarding categories
+LOW_FEs_Cat = ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.75, inherit.aes = F) +
+  geom_polygon(alpha = .5, col = "black", fill = "white") +
+  geom_polygon(data = conv_hull_low, aes(x = PC1, y = PC2), alpha = .5, col = "black", fill = "yellow") +
+  geom_point(data = FEs_cat_dataset_Low, aes(x = PC1, y = PC2, size = Low), col = "black", fill = "yellow", shape = 21) +
+  theme_minimal() + scale_size_continuous(range = c(1, 2)) + theme(legend.position = "none") +
+  ggtitle("FEs with low damages (i.e., < 30%)")
+
+MOD_FEs_Cat = ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.75, inherit.aes = F) +
+  geom_polygon(alpha = .5, col = "black", fill = "white") +
+  geom_polygon(data = conv_hull_mod, aes(x = PC1, y = PC2), alpha = .5, col = "black", fill = "orange") +
+  geom_point(data = FEs_cat_dataset_Mod, aes(x = PC1, y = PC2, size = Moderate), col = "black", fill = "orange", shape = 21) +
+  theme_minimal() + scale_size_continuous(range = c(1, 2.25)) + theme(legend.position = "none") +
+  ggtitle("FEs with moderate damages (i.e., > 30% and < 60%)")
+
+SEV_FEs_Cat = ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.75, inherit.aes = F) +
+  geom_polygon(alpha = .5, col = "black", fill = "white") +
+  geom_polygon(data = conv_hull_sev, aes(x = PC1, y = PC2), alpha = .5, col = "black", fill = "red") +
+  geom_point(data = FEs_cat_dataset_Sev, aes(x = PC1, y = PC2, size = Severe), col = "black", fill = "red", shape = 21) +
+  theme_minimal() + scale_size_continuous(range = c(1, 12)) + theme(legend.position = "none") +
+  ggtitle("FEs with high damages (i.e., > 60%)")
+
+Figure_4 = LOW_FEs_Cat + MOD_FEs_Cat + SEV_FEs_Cat
 
 # 6️⃣ Figures 📊 ----
 
