@@ -15,7 +15,8 @@ library(viridis)
 library(readxl) 
 library(scales) 
 library(rgeos)
-library(rgdal) 
+library(rgdal)
+library(mFD)
 library(sf) 
 
 ## Functions and shapefiles
@@ -258,100 +259,134 @@ grid_dataset       <- merge(data_ID_Cell, grid_dataset, by.x = "x", by.y = "rect
 FE_dataset         <- grid_dataset %>% mutate(ID = paste(grid_dataset$ID_Cell, 
                                                          grid_dataset$Damaged.qualitative, sep = "_"))
 
+## Play with mortality rates
 FE_matrix          <- FE_dataset %>% group_by(ID, FEs) %>% summarise(occurence = n())
 FE_matrix          <- reshape2::acast(FE_matrix, ID~FEs, value.var = "occurence")
 
-## Convert in Presence absence
+### Convert in Presence absence
 FE_matrix[is.na(FE_matrix)] <- 0
 FE_matrix[FE_matrix > 0]    <- 1
 
-# computing Gower distance between FEs
-library(mFD)
+### computing Gower distance between FEs
 fe_fe_dist <- funct.dist(fe_tr, tr_cat[,-3], metric = "gower")
 fe_fspaces <- quality.fspaces(sp_dist = fe_fe_dist)
-# Looking for how many axes
+
+### Looking for how many axes
 print(round(fe_fspaces$quality_fspaces,3)) # > 6 dimensions
 fe_6D_coord <- fe_fspaces$details_fspaces$sp_pc_coord[,1:6]
 
-quadrats_multidimFD <- alpha.fd.multidim(sp_faxes_coord   = fe_6D_coord, 
-                                         asb_sp_w         = FE_matrix, 
-                                         ind_vect         = c("fdis", "fide", "fspe", "fori"), 
-                                         scaling          = TRUE, 
-                                         details_returned = TRUE)
-quadrats_taxo_hill  <- alpha.fd.hill(asb_sp_w         = FE_matrix, 
-                                     sp_dist          = fe_fe_dist, 
-                                     q                = c(0,1), 
-                                     tau              = "min", 
-                                     details_returned = FALSE)
-colnames(quadrats_taxo_hill) <- c("FE_richness", "FE_shannon")
-quadrats_funct_hill <- alpha.fd.hill(asb_sp_w         = FE_matrix, 
-                                     sp_dist          = fe_fe_dist, 
-                                     q                = 1, 
-                                     tau              = "min", 
-                                     details_returned = FALSE)
-
-# Merging all diversity indices with quadrats info
-quadrats_biodiv     <- data.frame(Nb_sp         = quadrats_multidimFD$functional_diversity_indices[,1], 
-                                  Impact_damage = sub("^[^_]*_", "", sub("^[^_]*_", "", rownames(quadrats_biodiv))),
-                                  quadrats_taxo_hill, 
-                                  quadrats_funct_hill, 
-                                  quadrats_multidimFD$functional_diversity_indices[,-1]) 
-
+### Define the number of mortality occurences
 habcat = FE_matrix %>% data.frame() %>% mutate_if(is.character,as.numeric) %>% 
-  mutate(cat = quadrats_biodiv$Impact_damage) %>% group_by(cat) %>% 
+  mutate(cat = sub("^[^_]*_", "", sub("^[^_]*_", "", rownames(FE_matrix)))) %>% group_by(cat) %>% 
   summarise_all(sum)
-
 FEs_cat_dataset = t(habcat) %>% data.frame() %>% janitor::row_to_names(row_number = 1) %>% 
   rownames_to_column(var = "FEs")
-# Coordinates of all species
-pool_coord   <- quadrats_multidimFD$details$sp_faxes_coord %>% data.frame() %>% 
+colnames(FEs_cat_dataset) <- c("FEs", "Low_mor_occ", "Mod_mor_occ", "Sev_mor_occ")
+
+## Define the survival rates
+grid_dataset$survival_rate <- 100 - grid_dataset$Damaged.percentage
+FE_dataset         <- grid_dataset %>% mutate(ID = paste(grid_dataset$ID_Cell, 
+                                                         grid_dataset$Damaged.qualitative, sep = "_"))
+FE_matrix          <- FE_dataset %>% group_by(ID, FEs) %>% summarise(survival_rate = mean(survival_rate))
+FE_matrix          <- reshape2::acast(FE_matrix, ID~FEs, value.var = "survival_rate")
+
+### Convert in survival rate matrix
+FE_matrix[FE_matrix > 0]    <- 0
+FE_matrix[is.na(FE_matrix)] <- 1
+
+### Functional statistics
+quadrats_multidimFD <- alpha.fd.multidim(sp_faxes_coord = fe_6D_coord, asb_sp_w = FE_matrix, ind_vect = c("fdis", "fide", "fspe", "fori"), 
+                                         scaling = TRUE, details_returned = TRUE)
+quadrats_taxo_hill  <- alpha.fd.hill(asb_sp_w = FE_matrix, sp_dist = fe_fe_dist, q = c(0,1), tau = "min", details_returned = FALSE)
+colnames(quadrats_taxo_hill) <- c("FE_richness", "FE_shannon")
+quadrats_funct_hill <- alpha.fd.hill(asb_sp_w = FE_matrix, sp_dist = fe_fe_dist, q = 1, tau = "min", details_returned = FALSE)
+
+### Merging all diversity indices with specific info
+quadrats_biodiv     <- data.frame(Nb_sp         = quadrats_multidimFD$functional_diversity_indices[,1], 
+                                  Impact_damage = sub("^[^_]*_", "", sub("^[^_]*_", "", rownames(quadrats_taxo_hill))),
+                                  quadrats_taxo_hill, quadrats_funct_hill, quadrats_multidimFD$functional_diversity_indices[,-1]) 
+
+### Merge PCoA coord with mortality records
+pool_coord          <- quadrats_multidimFD$details$sp_faxes_coord %>% data.frame() %>% rownames_to_column(var = "FEs")
+FEs_cat_dataset     <- merge(FEs_cat_dataset, pool_coord, by = 'FEs')
+
+### Mortality Presence / Absence
+Mortality_PA        <- FE_matrix %>% data.frame() %>% mutate_if(is.character,as.numeric) %>% 
+  mutate(cat = quadrats_biodiv$Impact_damage) %>% group_by(cat) %>% 
+  summarise_all(min)
+Mortality_PA        <- t(Mortality_PA) %>% data.frame() %>% janitor::row_to_names(row_number = 1) %>% 
   rownames_to_column(var = "FEs")
 
-FEs_cat_dataset = merge(FEs_cat_dataset, pool_coord, by = 'FEs')
-FEs_cat_dataset$Low = as.numeric(FEs_cat_dataset$Low)
-FEs_cat_dataset$Moderate = as.numeric(FEs_cat_dataset$Moderate)
-FEs_cat_dataset$Severe = as.numeric(FEs_cat_dataset$Severe)
-FEs_cat_dataset_Low = FEs_cat_dataset %>% filter(Low > 0) %>% dplyr::select(-c(Moderate, Severe))
-FEs_cat_dataset_Mod = FEs_cat_dataset %>% filter(Moderate > 0) %>% dplyr::select(-c(Low, Severe))
-FEs_cat_dataset_Sev = FEs_cat_dataset %>% filter(Severe > 0) %>% dplyr::select(-c(Low, Moderate))
+## Final dataset hypervolume
+FEs_cat_dataset     <- merge(FEs_cat_dataset, Mortality_PA, by = 'FEs')
 
+## Builds the different datasets layers for the figure
+### General convex hull
 conv_hull_tot = FEs_cat_dataset %>%  slice(chull(PC1, PC2))
-conv_hull_low = FEs_cat_dataset_Low %>%  slice(chull(PC1, PC2))
-conv_hull_mod = FEs_cat_dataset_Mod %>%  slice(chull(PC1, PC2))
-conv_hull_sev = FEs_cat_dataset_Sev %>%  slice(chull(PC1, PC2))
 
-# Figure Polygons regarding categories
-LOW_FEs_Cat = ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
+### Low damage
+FEs_cat_dataset$Low         <- as.numeric(FEs_cat_dataset$Low)
+FEs_cat_dataset$Low_mor_occ <- as.numeric(FEs_cat_dataset$Low_mor_occ)
+FEs_cat_dataset$Low_mor_log <- log(FEs_cat_dataset$Low_mor_occ + 1)
+FEs_cat_dataset_Low_aliv    <- FEs_cat_dataset %>% filter(Low >  0) %>% dplyr::select(-c(Moderate, Severe, Mod_mor_occ, Sev_mor_occ)) 
+FEs_cat_dataset_Low_dead    <- FEs_cat_dataset %>% filter(Low == 0) %>% dplyr::select(-c(Moderate, Severe, Mod_mor_occ, Sev_mor_occ))
+conv_hull_low               <- FEs_cat_dataset_Low_aliv %>% slice(chull(PC1, PC2))
+
+### Moderate damage
+FEs_cat_dataset$Moderate    <- as.numeric(FEs_cat_dataset$Moderate)
+FEs_cat_dataset$Mod_mor_occ <- as.numeric(FEs_cat_dataset$Sev_mor_occ)
+FEs_cat_dataset$Mod_mor_log <- log(FEs_cat_dataset$Mod_mor_occ + 1)
+FEs_cat_dataset_Mod_aliv    <- FEs_cat_dataset %>% filter(Moderate >  0) %>% dplyr::select(-c(Low, Severe, Low_mor_occ, Sev_mor_occ)) 
+FEs_cat_dataset_Mod_dead    <- FEs_cat_dataset %>% filter(Moderate == 0) %>% dplyr::select(-c(Low, Severe, Low_mor_occ, Sev_mor_occ))
+conv_hull_mod               <- FEs_cat_dataset_Mod_aliv %>% slice(chull(PC1, PC2))
+
+### Moderate damage
+FEs_cat_dataset$Severe      <- as.numeric(FEs_cat_dataset$Severe)
+FEs_cat_dataset$Sev_mor_occ <- as.numeric(FEs_cat_dataset$Low_mor_occ)
+FEs_cat_dataset$Sev_mor_log <- log(FEs_cat_dataset$Sev_mor_occ + 1)
+FEs_cat_dataset_Sev_aliv    <- FEs_cat_dataset %>% filter(Severe >  0) %>% dplyr::select(-c(Low, Moderate, Low_mor_occ, Mod_mor_occ)) 
+FEs_cat_dataset_Sev_dead    <- FEs_cat_dataset %>% filter(Severe == 0) %>% dplyr::select(-c(Low, Moderate, Low_mor_occ, Mod_mor_occ))
+conv_hull_sev               <- FEs_cat_dataset_Sev_aliv %>% slice(chull(PC1, PC2))
+
+### Hypervolume Figure
+
+Low_hypervolume <- ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
-            fill = "#deebf7", color = "NA", alpha = 0.75, inherit.aes = F) +
-  geom_polygon(alpha = .5, col = "black", fill = "white") +
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(alpha = .8, col = "black", fill = "white") +
   geom_polygon(data = conv_hull_low, aes(x = PC1, y = PC2), alpha = .5, col = "black", fill = "yellow") +
-  geom_point(data = FEs_cat_dataset_Low, aes(x = PC1, y = PC2, size = Low), col = "black", fill = "yellow", shape = 21) +
-  theme_minimal() + scale_size_continuous(range = c(1, 2)) + theme(legend.position = "none") +
-  ggtitle("FEs with low damages (i.e., < 30%)")
+  geom_point(data = FEs_cat_dataset_Low_aliv, aes(x = PC1, y = PC2), col = "black", fill = "yellow", size = 3, shape = 21) +
+  geom_point(data = FEs_cat_dataset_Low_dead, aes(x = PC1, y = PC2, size = Low_mor_occ), col = "black", fill = "grey", shape = 21, alpha = .4) +
+  theme_minimal() + scale_size_continuous(range = c(min(FEs_cat_dataset_Low_dead$Low_mor_log) + 1, max(FEs_cat_dataset_Low_dead$Low_mor_log) + 1)) + 
+  theme(legend.position = "none") + ggtitle("Low damage (<30%)")
 
-MOD_FEs_Cat = ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
+Mod_hypervolume <- ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
-            fill = "#deebf7", color = "NA", alpha = 0.75, inherit.aes = F) +
-  geom_polygon(alpha = .5, col = "black", fill = "white") +
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(alpha = .8, col = "black", fill = "white") +
   geom_polygon(data = conv_hull_mod, aes(x = PC1, y = PC2), alpha = .5, col = "black", fill = "orange") +
-  geom_point(data = FEs_cat_dataset_Mod, aes(x = PC1, y = PC2, size = Moderate), col = "black", fill = "orange", shape = 21) +
-  theme_minimal() + scale_size_continuous(range = c(1, 2.25)) + theme(legend.position = "none") +
-  ggtitle("FEs with moderate damages (i.e., > 30% and < 60%)")
+  geom_point(data = FEs_cat_dataset_Mod_aliv, aes(x = PC1, y = PC2), col = "black", fill = "orange", size = 3, shape = 21) +
+  geom_point(data = FEs_cat_dataset_Mod_dead, aes(x = PC1, y = PC2, size = Mod_mor_occ), col = "black", fill = "grey", shape = 21, alpha = .4) +
+  theme_minimal() + scale_size_continuous(range = c(min(FEs_cat_dataset_Mod_dead$Mod_mor_log) + 1, max(FEs_cat_dataset_Mod_dead$Mod_mor_log) + 1)) + 
+  theme(legend.position = "none") + ggtitle("Moderate damage (>30% and <60%)")
 
-SEV_FEs_Cat = ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
+Sev_hypervolume <- ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
-            fill = "#deebf7", color = "NA", alpha = 0.75, inherit.aes = F) +
-  geom_polygon(alpha = .5, col = "black", fill = "white") +
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(alpha = .8, col = "black", fill = "white") +
   geom_polygon(data = conv_hull_sev, aes(x = PC1, y = PC2), alpha = .5, col = "black", fill = "red") +
-  geom_point(data = FEs_cat_dataset_Sev, aes(x = PC1, y = PC2, size = Severe), col = "black", fill = "red", shape = 21) +
-  theme_minimal() + scale_size_continuous(range = c(1, 12)) + theme(legend.position = "none") +
-  ggtitle("FEs with high damages (i.e., > 60%)")
+  geom_point(data = FEs_cat_dataset_Sev_aliv, aes(x = PC1, y = PC2), col = "black", fill = "red", size = 3, shape = 21) +
+  geom_point(data = FEs_cat_dataset_Sev_dead, aes(x = PC1, y = PC2, size = Sev_mor_occ), col = "black", fill = "grey", shape = 21, alpha = .4) +
+  theme_minimal() + scale_size_continuous(range = c(min(FEs_cat_dataset_Sev_dead$Sev_mor_log) + 1, max(FEs_cat_dataset_Sev_dead$Sev_mor_log) + 1)) + 
+  theme(legend.position = "none") + ggtitle("High damage (>60%)")
 
-Figure_4 = LOW_FEs_Cat + MOD_FEs_Cat + SEV_FEs_Cat
+Figure_4 = Low_hypervolume + Mod_hypervolume + Sev_hypervolume +
+  plot_annotation(title = 'Reduction of the functional hypervolume during MMEs from 2015 to 2019',
+                  caption = 'Disclaimer: the light grey dots represent affected FEs while colored dots represents non-affected FEs')
 
 # 6️⃣ Figures 📊 ----
 
 Figure_1 # Repartition of the data points all species + dammaged information
 Figure_2 # Repartition of the data points without P. nobilis + dammaged information
 Figure_3 # Combined gridded maps (1°x1°) – % of dammmaged, number of taxa affected, number of FEs affected
+Figure_4 # Figures with Functional entities and hypervolume
