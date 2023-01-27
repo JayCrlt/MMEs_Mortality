@@ -381,8 +381,8 @@ Sev_hypervolume <- ggplot(data = conv_hull_tot, aes(x = PC1, y = PC2)) +
   theme(legend.position = "none") + ggtitle("High damage (>60%)")
 
 Figure_4 = Low_hypervolume + Mod_hypervolume + Sev_hypervolume +
-  plot_annotation(title = 'Reduction of the functional hypervolume during MMEs from 2015 to 2019',
-                  caption = 'Disclaimer: the light grey dots represent affected FEs while colored dots represents non-affected FEs')
+  plot_annotation(title = 'Reduction of the functional hypervolume during the MMEs from 2015 to 2019',
+                  caption = 'Note: the light grey dots represent affected FEs while colored dots represents non-affected FEs')
 
 # 6️⃣ Figures 📊 ----
 
