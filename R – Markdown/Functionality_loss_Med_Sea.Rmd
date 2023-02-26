@@ -19,9 +19,26 @@ body {
   text-align: justify}
 </style>
 ```
-## Introduction
+## Highlights
 
-blablabla
+1.  Disproportionate collect effort information with *Pinna nobilis* (27% of the whole dataset representing 569 mortality records). Almost each mortality record accounting for *P. nobilis* are considered as severe (i.e., 91%) and 49% of the entire severe mortality records (i.e., 517 observations) focused on *P. nobilis*.
+
+2.  A total of 137 benthic species have been impaired by the MMEs. It represents in terms on functional entities, not less than 91 groups of species. Some traits regarding 11 species still need to be clarified.
+
+3.  The amount of FEs affected within a 1° cell is spatially sparced.
+
+4.  Species being/having
+
+    1) massive–erect form, \
+    2) solitary behaviour, \
+    3) a very high longevity, \
+    4) very big, \
+    5) heterotrophs, \
+    6) filters-feeders consumers, \
+    7) slow-growing, \
+    8) calcifying, \
+    9) sessile and \
+    10) non-carbon storing were the most impaired by the MMEs during the last decades.
 
 ```{r – Set the environment 💻 , echo=FALSE, include=FALSE, warning=FALSE}
 options(warn = -1)
@@ -38,6 +55,7 @@ library(data.tree)
 library(ggspatial) 
 library(patchwork)
 library(networkD3)
+library(sfheaders)
 library(mapdata) 
 library(leaflet) 
 library(viridis) 
@@ -124,7 +142,6 @@ leaflet() %>%
              position = "topright" )
 Figure_1
 ```
-
 ###### [Figure 1.]{.underline} Marine mortality records observed with percentage damage estimated across the Mediterranean Sea within the last 50 years
 
 However, there is a huge effort focused on *Pinna nobilis* since the last decade [@basso2015; @vázquez-luis2017] and if we discard this information, we might observe a really different pattern about mortality events.
@@ -145,7 +162,6 @@ leaflet() %>%
              position = "topright" )
 Figure_2
 ```
-
 ###### [Figure 2.]{.underline} Marine mortality records observed with percentage damage estimated across the Mediterranean Sea within the last 50 years, discarding *P. nobilis* records
 
 ## 2️⃣ Traits definition
@@ -258,7 +274,7 @@ To get more details, see this [table](https://docs.google.com/document/d/1MVJtbt
 
 In this section, we represent a global overview of the FE affected by the MMEs within the last 50 years and across the Mediterranean Sea.
 
-```{r Figure 3, echo=FALSE, warn = F}
+```{r Figure 3 old, echo=FALSE, warn = F}
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -375,15 +391,46 @@ Med_FEs  <- ggplot(data = world) +
         plot.margin = unit(c(-4,0,-4,0),"cm"),complete=TRUE) +
   guides(fill = guide_legend(nrow = 1))
 
-## Global map
-Figure_3 <- Med_FEs
-Figure_3
-
 ```
 
+```{r Figure 3 new, echo=FALSE, warn = F}
+
+mybins    <- seq(1,13,1)
+mypalette <- colorBin(palette="YlOrBr", 
+                      domain=unique(FEs_affected$number.of.FEs), 
+                      na.color="transparent", 
+                      bins=mybins)
+
+centroids <- FEs_affected %>% 
+  st_centroid() %>% 
+  # this is the crs from d, which has no EPSG code:
+  st_transform(., '+proj=longlat +ellps=GRS80 +no_defs') %>%
+  # since you want the centroids in a second geometry col:
+  st_geometry() %>% 
+  st_drop_geometry() %>% 
+  st_coordinates(centroids) %>% data.frame() %>% 
+  rename(Long = X, Lat = Y)
+
+FEs_affected = cbind(FEs_affected, centroids)
+
+Figure_3 <- FEs_affected %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  setView(lat = 40, lng = 18 , zoom = 4) %>%
+  addProviderTiles("Esri.WorldImagery") %>%
+  addCircles(~Long, ~Lat,  
+             fillColor = ~mypalette(number.of.FEs), 
+             fillOpacity = 0.8, color = "white", stroke = F, radius = 30000) %>%
+  addLegend( pal=mypalette, values=~number.of.FEs, opacity=0.9, 
+             title = "Number FEs affected by MMEs", 
+             position = "topright" )
+Figure_3
+```
 ###### [Figure 3.]{.underline} Number of Functional Entities (FEs) impaired during the last 50 years by the Mass Mortality Events (MMEs)
 
-One way to visualize which traits are the most impacted is to use a Sankey diagram. See below (interactive)
+### Which species are the most affected?
+
+One way to answer to this question is to visualize which traits are the most impacted using a Sankey diagram. In this way, we can disentangle which group or type of species were the most impaired by the previous MMEs.
 
 ```{r Figure 4, echo=FALSE, warn = F, out.extra= "100%"}
 table_sp_and_fe_sankey <- table_sp_and_fe_sankey %>% rename(species = Species)
@@ -504,23 +551,20 @@ Sankey_dataset <- rbind(sub_data_1, sub_data_2, sub_data_3, sub_data_4, sub_data
 
 Sankey_dataset_traits <- Sankey_dataset %>%
   group_by(Category) %>% 
-  summarise(value = sum(Occurence)/3, source = Trait) %>% 
+  summarise(value = sum(Occurence), source = Trait) %>% 
   rename(target = Category) 
-
 Sankey_dataset <- Sankey_dataset %>% 
   select(Category, damaged_qualitative, Occurence) %>% 
   rename(source = Category, target = damaged_qualitative, value = Occurence)
   
-#Sankey_dataset <- rbind(Sankey_dataset, Sankey_dataset_traits) %>% data.frame()
-
-Sankey_dataset <- Sankey_dataset %>% mutate(value = value * 1548)
+Sankey_dataset <- rbind(Sankey_dataset, Sankey_dataset_traits) %>% data.frame() %>%
+  distinct() %>% mutate(value = value * 1548)
 
 nodes = data.frame(name= unique(c(Sankey_dataset$source, Sankey_dataset$target)))
 
-Sankey_dataset$IDsource=match(Sankey_dataset$source, nodes$name)-1 
-Sankey_dataset$IDtarget=match(Sankey_dataset$target, nodes$name)-1
-
-Sankey_dataset <- Sankey_dataset %>% data.frame()
+Sankey_dataset <- Sankey_dataset %>% 
+  mutate(IDsource = match(Sankey_dataset$source, nodes$name)-1,
+         IDtarget=match(Sankey_dataset$target, nodes$name)-1) %>% data.frame()
 
 ColourScal ='d3.scaleOrdinal() 
 .range(["#92D718","#92D718","#92D718","#92D718","#92D718","#92D718","#92D718","#92D718",
@@ -533,16 +577,19 @@ ColourScal ='d3.scaleOrdinal()
         "#1D039C","#1D039C",
         "#5B06AB","#5B06AB",
         "#850DF7","#850DF7","#850DF7",
-        "#F7F30D","#F7AD0D","#F72D0D"])'
+        "#0DEAC5","#92D718","#08ADB5","#0DE0EA","#1D039C","#086EB5","#17CA78","#1D039C",
+        "#850DF7","#5B06AB","#F7F30D","#F7AD0D","#F72D0D"])'
 
 Figure_4 <- sankeyNetwork(Links = Sankey_dataset, Nodes = nodes,
               Source = "IDsource", Target = "IDtarget",
               Value = "value", NodeID = "name", colourScale = ColourScal , 
               sinksRight = FALSE, nodeWidth = 15, fontSize = 12, 
-              nodePadding = 3, iterations = 0)
+              nodePadding = 10, iterations = 0, width = 815, height = 700,
+              margin = list(right = -120))
 
 Figure_4
 ```
+###### [Figure 4.]{.underline} Traits impairment according to the MMEs damage severity
 
 Some traits are more impacted than others:
 
@@ -570,7 +617,7 @@ Some traits are more impacted than others:
     1384 occurrences with, 297 low-impacted, 271 moderate-impacted, 816 high-impacted\
     *89% from the whole dataset*
 
--   [**slow growth organisms**]{.underline}\
+-   [**slow-growing organisms**]{.underline}\
     1108 occurrences with, 219 low-impacted, 189 moderate-impacted, 700 high-impacted\
     *72% from the whole dataset*
 
@@ -586,7 +633,9 @@ Some traits are more impacted than others:
     1491 occurrences with, 343 low-impacted, 298 moderate-impacted, 850 high-impacted\
     *96% from the whole dataset*
 
-Another way to look at the data, is using Circular packing plots. However, it will not be possible to display it into a paper.
+Another way to look at the data, is using `Circular packing plots`. However, it will not be possible to display it into a paper.
+
+*NB: I did not manage to upload it online.*
 
 ```{r Figure 5, echo=FALSE}
 
@@ -656,5 +705,7 @@ Circular_Plot_dataset$pathString <- paste("world", Circular_Plot_dataset$group,
 
 Figure_5 <- circlepackeR(as.Node(Circular_Plot_dataset))
 ```
+
+## 4️⃣️ Traits hypervolume
 
 ## References
