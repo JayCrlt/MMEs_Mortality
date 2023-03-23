@@ -35,11 +35,11 @@ body {
 
     3.  a very high longevity,
 
-    4.  very big,
+    4.  very large,
 
     5.  heterotrophs,
 
-    6.  filters-feeders consumers,
+    6.  filters-feeders,
 
     7.  slow-growing,
 
@@ -47,7 +47,9 @@ body {
 
     9.  sessile and
 
-    10. non-carbon storing were the most impaired by the MMEs during the last decades.
+    10. non-blue-carbon storing strategy were the most impaired by the MMEs during the last decades.
+
+5.  The functional hypervolume is significantly decreasing according to the damage severity.
 
 ```{r – Set the environment 💻 , echo=FALSE, include=FALSE, warning=FALSE}
 options(warn = -1)
@@ -155,7 +157,7 @@ Figure_1
 
 ###### [Figure 1.]{.underline} Marine mortality records observed with percentage damage estimated across the Mediterranean Sea within the last 50 years
 
-However, there is a huge effort focused on *Pinna nobilis* since the last decade [@basso2015; @vázquez-luis2017] and if we discard this information, we might observe a really different pattern about mortality events.
+However, a considerable effort has been focused on *Pinna nobilis* since the last decade [@basso2015; @vázquez-luis2017], and if we discard this information, we might observe a different pattern of mortality events.
 
 ```{r Figure 2, echo=FALSE, fig.fullwidth=TRUE}
 ## First viz w/o P. nobilis
@@ -178,7 +180,7 @@ Figure_2
 
 ## 2️⃣ Traits definition
 
-In order to get a wider angle instead of quantifying traditional biodiversity loss, we defined for each species, 10 qualitative traits (see **Table 1**) to define group of species that behave the same into the Mediterranean Sea [@gomezgras_climate_2021; @teixido_functional_2018]. In other words, these group of species, called 'functional entities' @villéger2011, might ensure the same group of functions into the ecosystem.
+In order to get a wider angle instead of quantifying traditional biodiversity loss, we defined for each species, 10 qualitative traits (see **Table 1**) to define a group of species that behave the same into the Mediterranean Sea [@gomezgras_climate_2021; @teixido_functional_2018]. In other words, those groups of species, called 'functional entities' @villéger2011, might ensure the same group of functions into the ecosystem.
 
 ```{r analysis, echo = F}
 ## Define the FE number
@@ -282,8 +284,6 @@ Note, that here, the Functional entities `#11`, `#26`, `#29`, `#32`, `#33`, `#35
 To get more details, see this [table](https://docs.google.com/document/d/1MVJtbtWembTGE1Y3Rv9dA3lmj9zOvB298sjfcH82GLc/edit)
 
 ## 3️⃣ Traits impairment
-
-In this section, we represent a global overview of the FE affected by the MMEs within the last 50 years and across the Mediterranean Sea.
 
 ```{r Figure 3 old, echo=FALSE, warn = F}
 
@@ -442,7 +442,7 @@ Figure_3
 
 ### Which species are the most affected?
 
-One way to answer to this question is to visualize which traits are the most impacted using a Sankey diagram. In this way, we can disentangle which group or type of species were the most impaired by the previous MMEs.
+One way to answer this question is to visualize which traits are the most impacted using a Sankey diagram. In this way, we can disentangle which group or type of species was the most impaired by the previous MMEs.
 
 ```{r Figure 4, echo=FALSE, warn = F, out.extra= "100%"}
 table_sp_and_fe_sankey <- table_sp_and_fe_sankey %>% rename(species = Species)
@@ -618,7 +618,7 @@ Some traits are more impacted than others:
     1049 occurrences with, 222 low-impacted, 164 moderate-impacted, 663 high-impacted\
     *68% from the whole dataset*
 
--   [**very big organisms**]{.underline}\
+-   [**very large organisms**]{.underline}\
     864 occurrences with, 134 low-impacted, 125 moderate-impacted, 605 high-impacted\
     *56% from the whole dataset*
 
@@ -642,7 +642,7 @@ Some traits are more impacted than others:
     1500 occurrences with, 376 low-impacted, 290 moderate-impacted, 834 high-impacted\
     *97% from the whole dataset*
 
--   [**non-storing organisms**]{.underline} ⚠️\
+-   [**non-blue-carbon storing organisms**]{.underline} ⚠️\
     1491 occurrences with, 343 low-impacted, 298 moderate-impacted, 850 high-impacted\
     *96% from the whole dataset*
 
@@ -908,5 +908,686 @@ ggplotly(Low_hypervolume) %>% layout(hovermode ='FEs')
 ggplotly(Mod_hypervolume) %>% layout(hovermode ='FEs')
 ggplotly(Sev_hypervolume) %>% layout(hovermode ='FEs')
 ```
+
+## 5️⃣ Figures selection
+
+```{r figure 3 for RPROC B, echo = F}
+grid_dataset <- grid_dataset %>% 
+  dplyr::select(-c(lon_rounded_0, lon_rounded_1, lat_rounded_0, lat_rounded_1, x.y, geometry, x))
+
+# Refine percentage
+grid_dataset <- grid_dataset %>% dplyr::filter(damaged_percentatge > 0) # Problem with 0 occurences
+grid_dataset$damage_sub_cat <- cut_width(grid_dataset$damaged_percentatge, 10, boundary = 0)
+
+# Refine cumulative – If affected at further level, it'd be affected correspondingly
+data_FE_Affected <- table(grid_dataset$damage_sub_cat, grid_dataset$FEs) %>% as.data.frame.matrix() 
+
+{data_FE_Affected[1,]  <- data_FE_Affected[1,] + data_FE_Affected[2,] + data_FE_Affected[3,] +
+  data_FE_Affected[4,] + data_FE_Affected[5,] + data_FE_Affected[6,] + data_FE_Affected[7,] +
+  data_FE_Affected[8,] + data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[2,]  <- data_FE_Affected[2,] + data_FE_Affected[3,] + data_FE_Affected[4,] + 
+  data_FE_Affected[5,] + data_FE_Affected[6,] + data_FE_Affected[7,] + data_FE_Affected[8,] + 
+  data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[3,]  <- data_FE_Affected[3,] + data_FE_Affected[4,] + data_FE_Affected[5,] + 
+  data_FE_Affected[6,] + data_FE_Affected[7,] + data_FE_Affected[8,] + data_FE_Affected[9,] + 
+  data_FE_Affected[10,]
+data_FE_Affected[4,]  <- data_FE_Affected[4,] + data_FE_Affected[5,] + data_FE_Affected[6,] + 
+  data_FE_Affected[7,] + data_FE_Affected[8,] + data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[5,]  <- data_FE_Affected[5,] + data_FE_Affected[6,] + data_FE_Affected[7,] + 
+  data_FE_Affected[8,] + data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[6,]  <- data_FE_Affected[6,] + data_FE_Affected[7,] + data_FE_Affected[8,] + 
+  data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[7,]  <- data_FE_Affected[7,] + data_FE_Affected[8,] + data_FE_Affected[9,] + 
+  data_FE_Affected[10,]
+data_FE_Affected[8,]  <- data_FE_Affected[8,] + data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[9,]  <- data_FE_Affected[9,] + data_FE_Affected[10,]
+data_FE_Affected[10,] <- data_FE_Affected[10,]}
+
+# rowSums(data_FE_Affected)[1] # 1532 occurrences considered
+
+# Convert in P/A
+data_FE_Affected_PA = data_FE_Affected
+data_FE_Affected_PA[data_FE_Affected > 0] = "affected"
+data_FE_Affected_PA[data_FE_Affected == 0] = 1
+data_FE_Affected_PA[data_FE_Affected_PA == "affected"] = 0
+
+data_FE_Affected_PA <- t(data_FE_Affected_PA)
+data_FE_Affected_PA <- type.convert(data_FE_Affected_PA, as.is = TRUE)
+
+data_FE_Affected <- t(data_FE_Affected)
+data_FE_Affected <- type.convert(data_FE_Affected, as.is = TRUE)
+data_FE_Affected <- data_FE_Affected %>% data.frame()
+
+# Merge Data_FE_Affected with PCoA coords
+data_FE_Affected_PA <- data_FE_Affected_PA %>% data.frame() %>% rownames_to_column("FEs") %>% 
+  inner_join((fe_6D_coord %>% data.frame() %>% rownames_to_column("FEs")), by = "FEs")
+
+data_FE_Affected <- data_FE_Affected %>% data.frame() %>% rownames_to_column("FEs") %>% 
+  inner_join((fe_6D_coord %>% data.frame() %>% rownames_to_column("FEs")), by = "FEs")
+
+# Plot FE hypervolume space
+
+### Define convex hull
+conv_hull_tot = data_FE_Affected_PA %>%  slice(chull(PC1, PC2))
+conv_hull_010 = data_FE_Affected_PA %>% filter(X.0.10.   == 1) %>% slice(chull(PC1, PC2))
+conv_hull_020 = data_FE_Affected_PA %>% filter(X.10.20.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_030 = data_FE_Affected_PA %>% filter(X.20.30.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_040 = data_FE_Affected_PA %>% filter(X.30.40.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_050 = data_FE_Affected_PA %>% filter(X.40.50.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_060 = data_FE_Affected_PA %>% filter(X.50.60.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_070 = data_FE_Affected_PA %>% filter(X.60.70.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_080 = data_FE_Affected_PA %>% filter(X.70.80.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_090 = data_FE_Affected_PA %>% filter(X.80.90.  == 1) %>% slice(chull(PC1, PC2))
+conv_hull_100 = data_FE_Affected_PA %>% filter(X.90.100. == 1) %>% slice(chull(PC1, PC2))
+
+### Define corresponding datasets
+dataset_010 = data_FE_Affected_PA %>% filter(X.0.10.   == 1) 
+dataset_020 = data_FE_Affected_PA %>% filter(X.10.20.  == 1) 
+dataset_030 = data_FE_Affected_PA %>% filter(X.20.30.  == 1) 
+dataset_040 = data_FE_Affected_PA %>% filter(X.30.40.  == 1) 
+dataset_050 = data_FE_Affected_PA %>% filter(X.40.50.  == 1) 
+dataset_060 = data_FE_Affected_PA %>% filter(X.50.60.  == 1)
+dataset_070 = data_FE_Affected_PA %>% filter(X.60.70.  == 1) 
+dataset_080 = data_FE_Affected_PA %>% filter(X.70.80.  == 1)
+dataset_090 = data_FE_Affected_PA %>% filter(X.80.90.  == 1) 
+dataset_100 = data_FE_Affected_PA %>% filter(X.90.100. == 1) 
+
+### Volume
+VTot = cxhull::cxhull(data_FE_Affected_PA[,12:15] %>% as.matrix())$volume
+V30  = round(((cxhull::cxhull(dataset_030[,12:13] %>% as.matrix())$volume / 
+  cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% as.matrix())$volume)^3) * 100, 2)
+V40  = round(((cxhull::cxhull(dataset_040[,12:13] %>% as.matrix())$volume / 
+  cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% as.matrix())$volume)^3) * 100, 2)
+V50  = round((cxhull::cxhull(dataset_050[,12:15] %>% as.matrix())$volume / VTot) * 100, 2)
+V60  = round((cxhull::cxhull(dataset_060[,12:15] %>% as.matrix())$volume / VTot) * 100, 2)
+V70  = round((cxhull::cxhull(dataset_070[,12:15] %>% as.matrix())$volume / VTot) * 100, 2)
+V80  = round((cxhull::cxhull(dataset_080[,12:15] %>% as.matrix())$volume / VTot) * 100, 2)
+V90  = round((cxhull::cxhull(dataset_090[,12:15] %>% as.matrix())$volume / VTot) * 100, 2)
+V100 = round((cxhull::cxhull(dataset_100[,12:15] %>% as.matrix())$volume / VTot) * 100, 2)
+
+## Base Plot
+Base <- ggplot(data = data_FE_Affected, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "white") +
+  geom_point(aes(x = PC1, y = PC2), col = "black", 
+             fill = "white", size = 5, shape = 21) +
+  theme_minimal() + 
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  ggtitle("Functional entities hypervolume space")
+  
+# Low Damage
+Conv_010_020 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#a20000") +
+  geom_polygon(data = conv_hull_020, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#a20000", size = 5, shape = 21, alpha = .05) +
+  geom_point(data = dataset_020, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_label(label = paste("FE = ", dim(dataset_020)[1], "\n", "V   = ", "0.00%",
+                           sep = ""), fill = "#a20000",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[80% – 90%[")
+
+Conv_020_030 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#bd0909") +
+  geom_polygon(data = conv_hull_030, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#bd0909", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_label(label = paste("FE = ", dim(dataset_030)[1], "\n", "V   = ", "0.12%",
+                           sep = ""), fill = "#bd0909",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[70% – 80%[")
+
+# Moderate Damage
+Conv_030_040 <- ggplot(data = dataset_040, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#ca3a3a") +
+  geom_polygon(data = conv_hull_040, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#ca3a3a", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) +
+  geom_label(label = paste("FE = ", dim(dataset_040)[1], "\n", "V   = ", "0.33%",
+                           sep = ""), fill = "#ca3a3a",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[60% – 70%[")
+
+Conv_040_050 <- ggplot(data = dataset_050, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#c85250") +
+  geom_polygon(data = conv_hull_050, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#c85250", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_label(label = paste("FE = ", dim(dataset_050)[1], "\n", "V   = ", "0.49%",
+                           sep = ""), fill = "#c85250",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[50% – 60%[")
+
+Conv_050_060 <- ggplot(data = dataset_060, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#ca663a") +
+  geom_polygon(data = conv_hull_060, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#ca663a", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_label(label = paste("FE = ", dim(dataset_060)[1], "\n", "V   = ", "3.59%",
+                           sep = ""), fill = "#ca663a",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[40% – 50%[")
+
+# High damage
+Conv_060_070 <- ggplot(data = dataset_070, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#ff8c24") +
+  geom_polygon(data = conv_hull_070, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#ff8c24", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_label(label = paste("FE = ", dim(dataset_070)[1], "\n", "V   = ", "4.25%",
+                           sep = ""), fill = "#ff8c24",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[30% – 40%[")
+
+Conv_070_080 <- ggplot(data = dataset_080, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#ffa654") +
+  geom_polygon(data = conv_hull_080, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#ffa654", size = 5, shape = 21, alpha = .05) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  geom_label(label = paste("FE = ", dim(dataset_080)[1], "\n", "V   = ", "5.79%",
+                           sep = ""), fill = "#ffa654",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[20% – 30%[")
+
+Conv_080_090 <- ggplot(data = dataset_090, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#ffdc54") +
+  geom_polygon(data = conv_hull_090, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#ffdc54", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  geom_label(label = paste("FE = ", dim(dataset_090)[1], "\n", "V   = ", "13.7%",
+                           sep = ""), fill = "#ffdc54",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[10% – 20%[")
+
+Conv_090_100 <- ggplot(data = dataset_100, aes(x = PC1, y = PC2)) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), 
+            fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "#f1f292") +
+  geom_polygon(data = conv_hull_100, aes(x = PC1, y = PC2), 
+               alpha = .95, col = "black", fill = "white") +
+  geom_point(data = data_FE_Affected, aes(x = PC1, y = PC2, group = FEs), 
+             col = "black", fill = "#f1f292", size = 5, shape = 21, alpha = .05) +
+  geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
+  theme_minimal() +  
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+  geom_label(label = paste("FE = ", dim(dataset_100)[1], "\n", "V   = ", "27.3%",
+                           sep = ""), fill = "#f1f292",
+             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+  ggtitle("[0% – 10%[")
+
+Figure_3 <- Base + ((Conv_090_100 + Conv_080_090 + Conv_070_080) / (Conv_060_070 + Conv_050_060 + Conv_040_050) /
+  (Conv_030_040 + Conv_020_030 + Conv_010_020))
+```
+
+![Figure 3: caption](images/Figure_3.png)
+
+```{r figure 4 for RPROC B, echo = F, message=FALSE, warning=FALSE}
+
+options(dplyr.summarise.inform = FALSE)
+
+fe_6D_coord_df <- fe_6D_coord %>% data.frame() %>% rownames_to_column("FE") %>% 
+  mutate(FE = recode(FE, "fe_1" = "fe_01", "fe_2" = "fe_02", "fe_3" = "fe_03", 
+                     "fe_4" = "fe_04", "fe_5" = "fe_05", "fe_6" = "fe_06", 
+                     "fe_7" = "fe_07", "fe_8" = "fe_08", "fe_9" = "fe_09"))
+
+data_heatmap_FE <- Global_dataset %>% inner_join(fe_6D_coord_df, by = "FE") %>% 
+  dplyr::select(FE, year, `damaged_percentatge`, `damaged_qualitative`,
+                drivers_abiotic, drivers_abiotic_other, drivers_biotic_group,
+                drivers_biotic, drivers_biotic_other, PC1, PC2, PC3, PC4, PC5, PC6) 
+
+## ABIOTIC
+### Abiotic subgroups
+data_heatmap_FE_abiotic_summ = data_heatmap_FE %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  group_by(year, drivers_abiotic) %>% 
+  summarise(n = n()) %>% mutate(ID = paste(year, drivers_abiotic))
+
+data_heatmap_FE_abiotic_summ_seq <- data_heatmap_FE_abiotic_summ %>% distinct(ID) %>% data.frame() %>% 
+  mutate(dataset_ID = seq(1,45,1))
+
+data_heatmap_FE_abiotic <- data_heatmap_FE %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  mutate(ID = paste(year, drivers_abiotic)) %>% 
+  inner_join(data_heatmap_FE_abiotic_summ_seq) %>% 
+  group_by(dataset_ID) %>% 
+  group_split()
+
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE_abiotic_summ %>% 
+  inner_join(data_heatmap_FE_abiotic_summ_seq) %>% 
+  arrange(n) %>% 
+  dplyr::filter(n > 4) %>% 
+  arrange(dataset_ID) %>% 
+  dplyr::select(dataset_ID) %>% 
+  as.vector()
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE_abiotic_summ_sel$dataset_ID
+
+V = c()
+for (i in data_heatmap_FE_abiotic_summ_sel) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_abiotic[[i]][,4:7] %>% 
+                                 as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE_abiotic_summ %>% 
+  inner_join(data_heatmap_FE_abiotic_summ_seq) %>% 
+  arrange(n) %>% 
+  dplyr::filter(n >= 3) %>% 
+  dplyr::filter(n <= 4) %>% 
+  arrange(dataset_ID) %>% 
+  dplyr::select(dataset_ID) %>% 
+  as.vector()
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE_abiotic_summ_sel$dataset_ID
+
+for (i in data_heatmap_FE_abiotic_summ_sel) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_abiotic[[i]][,4:5] %>% 
+                                      as.matrix())$volume / 
+                cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_abiotic_summ <- data_heatmap_FE_abiotic_summ %>% 
+  dplyr::select(year, drivers_abiotic, n) 
+data_heatmap_FE_abiotic_summ <- cbind(data_heatmap_FE_abiotic_summ, c(V$., 0))
+colnames(data_heatmap_FE_abiotic_summ)[4] <- "Volume"
+
+data_to_fill <- data.frame(year = seq(1986,2020,1))
+
+data_heatmap_FE_abiotic_summ <- data_heatmap_FE_abiotic_summ %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year, drivers_abiotic) %>% 
+  drop_na(drivers_abiotic)
+
+Figure_4A <- ggplot(data_heatmap_FE_abiotic_summ, aes(year, drivers_abiotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "OrYel", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+### Abiotic group
+data_heatmap_FE_abiotic_summ = data_heatmap_FE %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 29,1))
+
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 29,1)) %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE_abiotic_summ_sel$ID
+
+data_heatmap_FE_abiotic <- data_heatmap_FE %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_abiotic_summ_sel) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_abiotic[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 29,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_abiotic_summ_sel <- data_heatmap_FE_abiotic_summ_sel$ID
+
+for (i in data_heatmap_FE_abiotic_summ_sel[-7]) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_abiotic[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_abiotic_summ <- data_heatmap_FE_abiotic_summ %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_abiotic_summ <- cbind(data_heatmap_FE_abiotic_summ, c(V$., 0))
+colnames(data_heatmap_FE_abiotic_summ)[3] <- "Volume"
+
+data_heatmap_FE_abiotic_summ <- data_heatmap_FE_abiotic_summ %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_abiotic = "Overall abiotic pressures")
+
+Figure_4B <- ggplot(data_heatmap_FE_abiotic_summ, aes(year, drivers_abiotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "OrYel", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold"),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+## BIOTIC
+### biotic subgroups
+data_heatmap_FE_biotic_summ = data_heatmap_FE %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  group_by(year, drivers_biotic_group) %>% 
+  summarise(n = n()) %>% mutate(ID = paste(year, drivers_biotic_group))
+
+data_heatmap_FE_biotic_summ_seq <- data_heatmap_FE_biotic_summ %>% distinct(ID) %>% data.frame() %>% 
+  mutate(dataset_ID = seq(1,24,1))
+
+data_heatmap_FE_biotic <- data_heatmap_FE %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  mutate(ID = paste(year, drivers_biotic_group)) %>% 
+  inner_join(data_heatmap_FE_biotic_summ_seq) %>% 
+  group_by(dataset_ID) %>% 
+  group_split()
+
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE_biotic_summ %>% 
+  inner_join(data_heatmap_FE_biotic_summ_seq) %>% 
+  arrange(n) %>% 
+  dplyr::filter(n > 4) %>% 
+  arrange(dataset_ID) %>% 
+  dplyr::select(dataset_ID) %>% 
+  as.vector()
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE_biotic_summ_sel$dataset_ID
+
+V = c()
+for (i in data_heatmap_FE_biotic_summ_sel) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_biotic[[i]][,4:7] %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE_biotic_summ %>% 
+  inner_join(data_heatmap_FE_biotic_summ_seq) %>% 
+  arrange(n) %>% 
+  dplyr::filter(n >= 3) %>% 
+  dplyr::filter(n <= 4) %>% 
+  arrange(dataset_ID) %>% 
+  dplyr::select(dataset_ID) %>% 
+  as.vector()
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE_biotic_summ_sel$dataset_ID
+
+for (i in data_heatmap_FE_biotic_summ_sel) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_biotic[[i]][,4:5] %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_biotic_summ <- data_heatmap_FE_biotic_summ %>% 
+  dplyr::select(year, drivers_biotic_group, n) 
+data_heatmap_FE_biotic_summ <- cbind(data_heatmap_FE_biotic_summ, c(V$., rep(0, 2)))
+colnames(data_heatmap_FE_biotic_summ)[4] <- "Volume"
+
+data_heatmap_FE_biotic_summ <- data_heatmap_FE_biotic_summ %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year, drivers_biotic_group) %>% 
+  drop_na(drivers_biotic_group)
+
+Figure_4C <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic_group, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "OrYel", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+### biotic group
+data_heatmap_FE_biotic_summ = data_heatmap_FE %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 16, 1))
+
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 16,1)) %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE_biotic_summ_sel$ID
+
+data_heatmap_FE_biotic <- data_heatmap_FE %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_biotic_summ_sel[-3]) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_biotic[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_biotic_summ_sel <- data_heatmap_FE %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 16,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_biotic_summ_sel <- c(data_heatmap_FE_biotic_summ_sel$ID, 15)
+
+for (i in data_heatmap_FE_biotic_summ_sel) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_biotic[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_biotic_summ <- data_heatmap_FE_biotic_summ %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_biotic_summ <- cbind(data_heatmap_FE_biotic_summ, c(V$., 0))
+colnames(data_heatmap_FE_biotic_summ)[3] <- "Volume"
+
+data_heatmap_FE_biotic_summ <- data_heatmap_FE_biotic_summ %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_biotic = "Overall biotic pressures")
+
+Figure_4D <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "OrYel", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold"),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+## BIOTIC & ABIOTIC
+data_heatmap_FE_all_summ_1 = data_heatmap_FE_biotic %>% bind_rows()
+data_heatmap_FE_all_summ_2 = data_heatmap_FE_abiotic %>% bind_rows()
+data_heatmap_FE_all_summ   = rbind(data_heatmap_FE_all_summ_1[,-1], 
+                                   data_heatmap_FE_all_summ_2[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 29, 1))
+
+data_heatmap_FE_all_summ_sel <- data_heatmap_FE_all_summ %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_all_summ_sel <- data_heatmap_FE_all_summ_sel$ID
+
+data_heatmap_FE_all <- rbind(data_heatmap_FE_all_summ_1[,-1], 
+                             data_heatmap_FE_all_summ_2[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>%  
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_all_summ_sel) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_all[[i]][,3:6] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_all_summ_sel <- data_heatmap_FE_all_summ %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_all_summ_sel <- c(data_heatmap_FE_all_summ_sel$ID)
+
+for (i in data_heatmap_FE_all_summ_sel) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_all[[i]][,3:4] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_all_summ <- data_heatmap_FE_all_summ %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_all_summ <- cbind(data_heatmap_FE_all_summ, V$.)
+colnames(data_heatmap_FE_all_summ)[3] <- "Volume"
+
+data_heatmap_FE_all_summ <- data_heatmap_FE_all_summ %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_all = "Overall biotic & \n abiotic pressures")
+
+Figure_4E <- ggplot(data_heatmap_FE_all_summ, aes(year, drivers_all, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "OrYel", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold"))
+
+
+
+Figure_4 <- Figure_4A / plot_spacer() / Figure_4B / Figure_4C / plot_spacer() / Figure_4D / Figure_4E + 
+  plot_layout(heights = c(5, -1.25, 1, 4, -1.25, 1, 1), guides = 'collect') & 
+  theme(legend.position = 'bottom') &
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "OrYel", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8),
+                                               name = "Functional volume affected \n(sqrt transformation) (%)")
+
+```
+
+![Figure 4: caption](images/Figure_4.png)
 
 ## References
