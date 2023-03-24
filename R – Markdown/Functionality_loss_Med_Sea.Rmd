@@ -941,7 +941,7 @@ mypalette <- colorBin(palette = mycolors,
 
 Figure 1: caption
 
-![Figure 2: caption](images/Figure_2.png)
+![Figure 2: caption](images/Figure_2-01.png)
 
 ```{r figure 3 for RPROC B, echo = F}
 grid_dataset <- grid_dataset %>% 
@@ -1365,7 +1365,7 @@ F2_E <- ggradar(Energy_trait,
                 axis.labels = c("Photosynthetic \nautotroph", "Photo-\nheterotroph", 
                                 "Heterotroph"),
                 legend.text.size = 10) +
-  ggtitle("Energy") +
+  ggtitle("Energetic resources") +
   theme(plot.title = element_text(size = 15, face = "bold"))
 
 Feeding_trait <- data_trait_occurences[,c(2:11, 17)] %>% group_by(Feeding) %>% 
@@ -1506,7 +1506,7 @@ F2_J <- ggradar(Storage_trait,
                 axis.label.size = 3,
                 axis.labels = c("Storing", "Likely-\nstoring", "Non-\nstoring"),
                 legend.text.size = 10) +
-  ggtitle("Storage") +
+  ggtitle("Carbon storage") +
   theme(plot.title = element_text(size = 15, face = "bold"))
 
 Figure_2 = F2_A + F2_B + F2_C + F2_D + F2_E + F2_F + F2_G + F2_H + F2_I + F2_J +
@@ -1969,6 +1969,5 @@ Figure_data_paper <- ggplot(conservation_streamgraph, aes(x = year, y = Mortalit
 ```
 
 ![Figure Data Paper ?](images/Data_paper.png)
-
 
 ## References
