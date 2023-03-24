@@ -67,6 +67,7 @@ library(ggspatial)
 library(patchwork)
 library(networkD3)
 library(sfheaders)
+library(ggstream)
 library(ggradar)
 library(mapdata) 
 library(leaflet) 
@@ -1209,7 +1210,6 @@ Figure_3 <- Base + ((Conv_090_100 + Conv_080_090 + Conv_070_080) / (Conv_060_070
   (Conv_030_040 + Conv_020_030 + Conv_010_020))
 ```
 
-
 ```{r figure 2 for RPROC B, echo = F}
 data_trait_occurences <- data_FE_Affected %>% 
   mutate(FEs = recode(FEs, "fe_1" = "fe_01", "fe_2" = "fe_02", "fe_3" = "fe_03", 
@@ -1926,5 +1926,49 @@ Figure_4 <- Figure_4A / plot_spacer() / Figure_4B / Figure_4C / plot_spacer() / 
 ```
 
 ![Figure 4: caption](images/Figure_4.png)
+
+```{r Figure Data paper, echo = F, warning = FALSE, message = FALSE}
+
+data_conservation_status = merge(MME_Merged_data, species_traits, by = "species")
+data_conservation_status$protected[data_conservation_status$protected == "a?"] = "a"
+data_conservation_status = data.frame(year    = data_conservation_status$year,
+                                      species = data_conservation_status$species,
+                                      protect = data_conservation_status$protected,
+                                      conserv = data_conservation_status$Conservation.status)
+
+conservation_streamgraph <- data_conservation_status %>% mutate(ind = 1) %>% group_by(year, conserv) %>% 
+  summarise(sum_cat = sum(ind)) %>% data.frame() %>% 
+  mutate(conserv = recode(conserv, "a" = "Critically endangered", 
+                                   "b" = "Endangered", 
+                                   "c" = "Vulnerable",
+                                   "d" = "Near threatened",
+                                   "e" = "Least concern",
+                                   "f" = "Data deficient",
+                                   "g" = "Not evaluated")) %>% 
+  rename(., `Conservation status` = conserv,`Mortality records` = sum_cat) %>% data.frame()
+
+conservation_streamgraph$Conservation.status <- factor(conservation_streamgraph$Conservation.status, 
+                                                       levels = c("Critically endangered", "Endangered", "Vulnerable",
+                                                                  "Near threatened", "Least concern", "Data deficient",
+                                                                  "Not evaluated"))
+
+nb_protected_sp = data_conservation_status %>% group_by(year, conserv) %>% distinct(year, species, protect) %>% ungroup() %>% 
+  dplyr::filter(protect == "a") %>% dplyr::select(year, species) %>% 
+  mutate(nb_sp_protected = 1) %>% group_by(year) %>% 
+  summarise(nb_sp_protected = sum(nb_sp_protected)) %>% data.frame() 
+
+Figure_data_paper <- ggplot(conservation_streamgraph, aes(x = year, y = Mortality.records)) +
+  geom_stream(type = "ridge", color = "black", aes(fill = Conservation.status)) +
+  scale_y_continuous(limits = c(0, 1000), name = "Motality records") +
+  scale_x_continuous(breaks = seq(1979, 2020, 1), limits = c(1979, 2020), name = "") +
+  theme_classic() + labs(fill = "Conservation status") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_fill_manual(values = c("#6f0000", "#bd0909", "#c85250", "#ff8c24", "#ffdc54", "#f1f292", "#ffffff")) +
+  geom_label(data = nb_protected_sp, aes(x = year, label = nb_sp_protected), y = 1000) 
+
+```
+
+![Figure Data Paper ?](images/Data_paper.png)
+
 
 ## References
