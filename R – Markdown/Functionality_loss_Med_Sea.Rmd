@@ -406,42 +406,6 @@ Med_FEs  <- ggplot(data = world) +
 
 ```
 
-```{r Figure 3 new, echo=FALSE, warn = F}
-
-mybins    <- seq(1,13,1)
-mypalette <- colorBin(palette="YlOrBr", 
-                      domain=unique(FEs_affected$number.of.FEs), 
-                      na.color="transparent", 
-                      bins=mybins)
-
-centroids <- FEs_affected %>% 
-  st_centroid() %>% 
-  # this is the crs from d, which has no EPSG code:
-  st_transform(., '+proj=longlat +ellps=GRS80 +no_defs') %>%
-  # since you want the centroids in a second geometry col:
-  st_geometry() %>% 
-  st_drop_geometry() %>% 
-  st_coordinates(centroids) %>% data.frame() %>% 
-  rename(Long = X, Lat = Y)
-
-FEs_affected = cbind(FEs_affected, centroids)
-
-Figure_3 <- FEs_affected %>% 
-  leaflet() %>% 
-  addTiles() %>% 
-  setView(lat = 40, lng = 18 , zoom = 4) %>%
-  addProviderTiles("Esri.WorldImagery") %>%
-  addCircles(~Long, ~Lat,  
-             fillColor = ~mypalette(number.of.FEs), 
-             fillOpacity = 0.8, color = "white", stroke = F, radius = 30000) %>%
-  addLegend( pal=mypalette, values=~number.of.FEs, opacity=0.9, 
-             title = "Number FEs affected by MMEs", 
-             position = "topright" )
-Figure_3
-```
-
-###### [Figure 3.]{.underline} Number of Functional Entities (FEs) impaired during the last 50 years by the Mass Mortality Events (MMEs)
-
 ### Which species are the most affected?
 
 One way to answer this question is to visualize which traits are the most impacted using a Sankey diagram. In this way, we can disentangle which group or type of species was the most impaired by the previous MMEs.
@@ -1958,13 +1922,15 @@ nb_protected_sp = data_conservation_status %>% group_by(year, conserv) %>% disti
   summarise(nb_sp_protected = sum(nb_sp_protected)) %>% data.frame() 
 
 Figure_data_paper <- ggplot(conservation_streamgraph, aes(x = year, y = Mortality.records)) +
-  geom_stream(type = "ridge", color = "black", aes(fill = Conservation.status)) +
-  scale_y_continuous(limits = c(0, 1000), name = "Motality records") +
-  scale_x_continuous(breaks = seq(1979, 2020, 1), limits = c(1979, 2020), name = "") +
+  geom_bar(position="stack", stat="identity", color = "black", 
+           aes(fill = Conservation.status)) +
+  scale_y_continuous(limits = c(0, 350), name = "Motality records") +
+  scale_x_continuous(breaks = seq(1980, 2020, 5), limits = c(1979, 2020), name = "") +
   theme_classic() + labs(fill = "Conservation status") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
-  scale_fill_manual(values = c("#6f0000", "#bd0909", "#c85250", "#ff8c24", "#ffdc54", "#f1f292", "#ffffff")) +
-  geom_label(data = nb_protected_sp, aes(x = year, label = nb_sp_protected), y = 1000) 
+  scale_fill_manual(values = c("#6f0000", "#bd0909", "#c85250", 
+                               "#ff8c24", "#ffdc54", "#f1f292", "#ffffff")) +
+  geom_label(data = nb_protected_sp, aes(x = year, label = nb_sp_protected), y = 350) 
 
 ```
 
