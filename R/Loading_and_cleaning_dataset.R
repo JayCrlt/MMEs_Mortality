@@ -12,7 +12,7 @@
 
 ## Load Datasets
 ### Dataset Functional traits from Nuria Teixido et al.
-species_traits <- read_excel("../Data/species_traits.xlsx", 
+species_traits <- read_excel("../Data/R/species_traits.xlsx", 
                              sheet = "4_species_traits_clean.vcomplet", 
                              col_types = c("text", "text", "text", "text", "text", "text",
                                            "text", "text", "text", "text", "text", "text",
@@ -20,7 +20,7 @@ species_traits <- read_excel("../Data/species_traits.xlsx",
 
 
 ### Dataset Mortality from Massimo Ponti et al.
-MME_Merged_data <- read_excel("../Data/MME-Review data.xlsx", 
+MME_Merged_data <- read_excel("../Data/R/MME-Review data.xlsx", 
                               sheet = "Merged datasets",
                               col_types = c("numeric", "text"   , "date"   , "date"   ,
                                             "numeric", "text"   , "numeric", "text"   ,

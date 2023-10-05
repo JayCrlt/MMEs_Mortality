@@ -45,6 +45,10 @@ data_spatial <- data_complete %>%
            PC1, PC2, PC3, PC4, PC5, PC6, FE_affected_western, FE_affected_central, FE_affected_eastern) %>% 
   distinct(FE) 
 
+data_spatial$FE_affected_western[is.na(data_spatial$FE_affected_western)] = "no"
+data_spatial$FE_affected_central[is.na(data_spatial$FE_affected_central)] = "no"
+data_spatial$FE_affected_eastern[is.na(data_spatial$FE_affected_eastern)] = "no"
+
 data_spatial_ws <- data_spatial %>% dplyr::filter(FE_affected_western == "yes")
 data_spatial_ct <- data_spatial %>% dplyr::filter(FE_affected_central == "yes")
 data_spatial_es <- data_spatial %>% dplyr::filter(FE_affected_eastern == "yes")
@@ -52,8 +56,6 @@ data_spatial_es <- data_spatial %>% dplyr::filter(FE_affected_eastern == "yes")
 conv_hull_ws = data_spatial_ws %>% data.frame %>% slice(chull(PC1, PC2))
 conv_hull_ct = data_spatial_ct %>% data.frame %>% slice(chull(PC1, PC2))
 conv_hull_es = data_spatial_es %>% data.frame %>% slice(chull(PC1, PC2))
-
-str(data_spatial_ws %>% data.frame)
 
 ### Plot
 PCA_Western <- ggplot() +
@@ -214,7 +216,7 @@ WT1 <- Feed_tot %>% mutate(feeding_ws_perc = (feeding_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`6.feeding`, y=feeding_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`6.feeding`, y=feeding_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`6.feeding`, y=feeding_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -234,7 +236,7 @@ WT2 <- Long_tot %>% mutate(age_ws_perc = (age_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`3.longevity`, y=age_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`3.longevity`, y=age_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`3.longevity`, y=age_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -254,7 +256,7 @@ WT3 <- Soli_tot %>% mutate(social_ws_perc = (social_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`2.solitary.colonial`, y=social_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`2.solitary.colonial`, y=social_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`2.solitary.colonial`, y=social_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -273,7 +275,7 @@ WT4 <- Morp_tot %>% mutate(morpho_ws_perc = (morpho_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`1.morphology`, y=morpho_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`1.morphology`, y=morpho_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`1.morphology`, y=morpho_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -293,7 +295,7 @@ WT5 <- Stor_tot %>% mutate(storage_ws_perc = (storage_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`10.carbon.storage`, y=storage_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`10.carbon.storage`, y=storage_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`10.carbon.storage`, y=storage_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -313,7 +315,7 @@ WT6 <- Ener_tot %>% mutate(energy_ws_perc = (energy_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`5.energetic.resource`, y=energy_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`5.energetic.resource`, y=energy_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`5.energetic.resource`, y=energy_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -333,7 +335,7 @@ WT7 <- Heig_tot %>% dplyr::filter(`4.height` != 0) %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`4.height`, y=height_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`4.height`, y=height_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`4.height`, y=height_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -354,7 +356,7 @@ WT8 <- Grow_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`7.growth.rates`, y=growth_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`7.growth.rates`, y=growth_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`7.growth.rates`, y=growth_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -375,7 +377,7 @@ WT9 <- Calc_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`8.calcification`, y=calcif_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`8.calcification`, y=calcif_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`8.calcification`, y=calcif_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -396,7 +398,7 @@ WT10 <- Mobi_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`9.mobility`, y=mobility_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`9.mobility`, y=mobility_ws_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`9.mobility`, y=mobility_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -407,9 +409,9 @@ WT10 <- Mobi_tot %>%
 WT_Panel_0 <- ggplot() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "goldenrod4") +
+  geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
   geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "goldenrod4", size = 5, shape = 21) +
+  geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
   theme_minimal() +  
   scale_x_continuous(name = "") + scale_y_continuous(name = "") +
   theme(legend.position = "none", 
@@ -437,7 +439,7 @@ CT1 <- Feed_tot %>% mutate(feeding_ws_perc = (feeding_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`6.feeding`, y=feeding_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`6.feeding`, y=feeding_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`6.feeding`, y=feeding_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -457,7 +459,7 @@ CT2 <- Long_tot %>% mutate(age_ws_perc = (age_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`3.longevity`, y=age_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`3.longevity`, y=age_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`3.longevity`, y=age_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -477,7 +479,7 @@ CT3 <- Soli_tot %>% mutate(social_ws_perc = (social_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`2.solitary.colonial`, y=social_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`2.solitary.colonial`, y=social_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`2.solitary.colonial`, y=social_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -496,7 +498,7 @@ CT4 <- Morp_tot %>% mutate(morpho_ws_perc = (morpho_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`1.morphology`, y=morpho_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`1.morphology`, y=morpho_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`1.morphology`, y=morpho_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -516,7 +518,7 @@ CT5 <- Stor_tot %>% mutate(storage_ws_perc = (storage_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`10.carbon.storage`, y=storage_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`10.carbon.storage`, y=storage_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`10.carbon.storage`, y=storage_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -536,7 +538,7 @@ CT6 <- Ener_tot %>% mutate(energy_ws_perc = (energy_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`5.energetic.resource`, y=energy_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`5.energetic.resource`, y=energy_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`5.energetic.resource`, y=energy_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -556,7 +558,7 @@ CT7 <- Heig_tot %>% dplyr::filter(`4.height` != 0) %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`4.height`, y=height_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`4.height`, y=height_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`4.height`, y=height_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -577,7 +579,7 @@ CT8 <- Grow_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`7.growth.rates`, y=growth_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`7.growth.rates`, y=growth_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`7.growth.rates`, y=growth_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -598,7 +600,7 @@ CT9 <- Calc_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`8.calcification`, y=calcif_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`8.calcification`, y=calcif_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`8.calcification`, y=calcif_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -619,7 +621,7 @@ CT10 <- Mobi_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`9.mobility`, y=mobility_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`9.mobility`, y=mobility_ct_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`9.mobility`, y=mobility_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -630,9 +632,9 @@ CT10 <- Mobi_tot %>%
 CT_Panel_0 <- ggplot() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "goldenrod4") +
+  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
   geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "goldenrod4", size = 5, shape = 21) +
+  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
   theme_minimal() +  
   scale_x_continuous(name = "") + scale_y_continuous(name = "") +
   theme(legend.position = "none", 
@@ -660,7 +662,7 @@ ES1 <- Feed_tot %>% mutate(feeding_ws_perc = (feeding_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`6.feeding`, y=feeding_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`6.feeding`, y=feeding_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`6.feeding`, y=feeding_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -680,7 +682,7 @@ ES2 <- Long_tot %>% mutate(age_ws_perc = (age_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`3.longevity`, y=age_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`3.longevity`, y=age_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`3.longevity`, y=age_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -700,7 +702,7 @@ ES3 <- Soli_tot %>% mutate(social_ws_perc = (social_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`2.solitary.colonial`, y=social_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`2.solitary.colonial`, y=social_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`2.solitary.colonial`, y=social_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -719,7 +721,7 @@ ES4 <- Morp_tot %>% mutate(morpho_ws_perc = (morpho_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`1.morphology`, y=morpho_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`1.morphology`, y=morpho_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`1.morphology`, y=morpho_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -739,7 +741,7 @@ ES5 <- Stor_tot %>% mutate(storage_ws_perc = (storage_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`10.carbon.storage`, y=storage_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`10.carbon.storage`, y=storage_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`10.carbon.storage`, y=storage_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -759,7 +761,7 @@ ES6 <- Ener_tot %>% mutate(energy_ws_perc = (energy_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`5.energetic.resource`, y=energy_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`5.energetic.resource`, y=energy_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`5.energetic.resource`, y=energy_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -779,7 +781,7 @@ ES7 <- Heig_tot %>% dplyr::filter(`4.height` != 0) %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`4.height`, y=height_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`4.height`, y=height_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`4.height`, y=height_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -800,7 +802,7 @@ ES8 <- Grow_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`7.growth.rates`, y=growth_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`7.growth.rates`, y=growth_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`7.growth.rates`, y=growth_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -821,7 +823,7 @@ ES9 <- Calc_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`8.calcification`, y=calcif_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`8.calcification`, y=calcif_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`8.calcification`, y=calcif_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -842,7 +844,7 @@ ES10 <- Mobi_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`9.mobility`, y=mobility_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`9.mobility`, y=mobility_es_perc), fill = "goldenrod4", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`9.mobility`, y=mobility_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -853,9 +855,9 @@ ES10 <- Mobi_tot %>%
 ES_Panel_0 <- ggplot() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "goldenrod4") +
-  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "goldenrod4", size = 5, shape = 21) +
+  geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
+  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 3, shape = 21) +
+  geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
   theme_minimal() +  
   scale_x_continuous(name = "") + scale_y_continuous(name = "") +
   theme(legend.position = "none", 
@@ -868,10 +870,25 @@ ES_Panel_3 <- (ES7 + ES8 + ES9 + ES10) + plot_layout(heights = c(5,5,2,2), nrow 
 
 plot_title <- cowplot::ggdraw() + cowplot::draw_text("Eastern Basin", x = 0, y = 0.25, hjust = 0, vjust = 1, angle = 0, size = 16) +
   theme_void() + theme(plot.margin = margin(20, 20, 20, 20))
-EASTERN <- cowplot::plot_grid(plot_title, cowplot::plot_grid(ES_Panel_0, ES_Panel_1, ES_Panel_2, ES_Panel_3, ncol = 4, rel_widths = c(0.4, 0.2, 0.2, 0.2)), ncol = 1, rel_heights = c(0.1, 0.9))
+EASTERN <- cowplot::plot_grid(plot_title, cowplot::plot_grid(ES_Panel_0, ES_Panel_1, ES_Panel_2, ES_Panel_3, ncol = 4, 
+                                                             rel_widths = c(0.4, 0.2, 0.2, 0.2)), ncol = 1, rel_heights = c(0.1, 0.9))
+
+EASTERN_subplot <- cowplot::plot_grid(ES_Panel_1 & theme(axis.text = element_text(size = 12)), 
+                                      ES_Panel_2 & theme(axis.text = element_text(size = 12)), 
+                                      ES_Panel_3 & theme(axis.text = element_text(size = 12)), ncol = 3)
 
 ### Save Figures
 # ggsave(WESTERN, filename = "../Figures/Figure_5_West.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
 # ggsave(CENTRAL, filename = "../Figures/Figure_5_Cent.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
 # ggsave(EASTERN, filename = "../Figures/Figure_5_East.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
 
+ggsave(ES1, filename = "../Figures/Figure_5/ES01", device = "png", width = 5, height = 7, units = "in", dpi = 300)
+ggsave(ES2, filename = "../Figures/Figure_5/ES02", device = "png", width = 5, height = 5, units = "in", dpi = 300)
+ggsave(ES3, filename = "../Figures/Figure_5/ES03", device = "png", width = 5, height = 2, units = "in", dpi = 300)
+ggsave(ES4, filename = "../Figures/Figure_5/ES04", device = "png", width = 5, height = 8, units = "in", dpi = 300)
+ggsave(ES5, filename = "../Figures/Figure_5/ES05", device = "png", width = 5, height = 3, units = "in", dpi = 300)
+ggsave(ES6, filename = "../Figures/Figure_5/ES06", device = "png", width = 5, height = 3, units = "in", dpi = 300)
+ggsave(ES7, filename = "../Figures/Figure_5/ES07", device = "png", width = 5, height = 5, units = "in", dpi = 300)
+ggsave(ES8, filename = "../Figures/Figure_5/ES08", device = "png", width = 5, height = 5, units = "in", dpi = 300)
+ggsave(ES9, filename = "../Figures/Figure_5/ES09", device = "png", width = 5, height = 2, units = "in", dpi = 300)
+ggsave(ES10, filename = "../Figures/Figure_5/ES10", device = "png", width = 5, height = 2, units = "in", dpi = 300)
