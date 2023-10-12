@@ -39,3 +39,16 @@ source("Figure_4.R")
 source("Figure_5.R")
 
 ## Saving Figures
+ggsave(Figure_2, filename = "../Figures/Figure_2.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
+ggsave(Figure_3, filename = "../Figures/Figure_3.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
+ggsave(Figure_4, filename = "../Figures/Figure_4.png", device = "png", width = 18.00, height = 7.00, units = "in", dpi = 300)
+
+ggsave(WESTERN_subplot, filename = "../Figures/WESTERN_subplot.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
+ggsave(EASTERN_subplot, filename = "../Figures/EASTERN_subplot.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
+ggsave(CENTRAL_subplot, filename = "../Figures/CENTRAL_subplot.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
+ggsave(WT_Panel_0, filename = "../Figures/WESTERN.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
+ggsave(CT_Panel_0, filename = "../Figures/CENTRAL.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
+ggsave(ES_Panel_0, filename = "../Figures/Eastern.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
+ggsave(Figure_5C_WT, filename = "../Figures/Figure_5C_WT.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
+ggsave(Figure_5C_CT, filename = "../Figures/Figure_5C_CT.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
+ggsave(Figure_5C_ES, filename = "../Figures/Figure_5C_ES.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
