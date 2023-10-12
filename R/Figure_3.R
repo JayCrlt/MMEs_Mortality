@@ -119,6 +119,8 @@ Base <- ggplot(data = data_FE_Affected, aes(x = PC1, y = PC2)) +
             fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, alpha = .8, col = "black", fill = "white") +
   geom_point(aes(x = PC1, y = PC2, size = nb_sp_within_FE, fill = Phylum), col = "black", shape = 21) +
+  scale_x_continuous(name = "PC1 (28.6%)", breaks = seq(-0.45, 0.35, 0.8)) +
+  scale_y_continuous(name = "PC2 (18.8%)",breaks = seq(-0.2, 0.6, 0.8)) +
   theme_minimal() + scale_size_continuous(range = c(1,8), 
                                           breaks = seq(1,10,1),
                                           limits = c(0, 8)) + 
@@ -126,8 +128,11 @@ Base <- ggplot(data = data_FE_Affected, aes(x = PC1, y = PC2)) +
                                "goldenrod", "violetred3", "brown", "palegreen4")) +
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
-  ggtitle("Functional entities hypervolume space")
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 16),
+        title = element_text(size = 14)) + 
+  ggtitle("")
 
 # Low Damage
 Conv_010_020 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
@@ -141,10 +146,12 @@ Conv_010_020 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
   geom_point(data = dataset_020, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_label(label = paste("FE = ", dim(dataset_020)[1], "\n", "V   = ", "0.00%",
                            sep = ""), fill = "#a20000",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[20% – 10%[")
 
 Conv_020_030 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
@@ -158,10 +165,12 @@ Conv_020_030 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_label(label = paste("FE = ", dim(dataset_030)[1], "\n", "V   = ", "0.12%",
                            sep = ""), fill = "#bd0909",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[30% – 20%[")
 
 # Moderate Damage
@@ -176,10 +185,12 @@ Conv_030_040 <- ggplot(data = dataset_040, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) +
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) +
   geom_label(label = paste("FE = ", dim(dataset_040)[1], "\n", "V   = ", "0.33%",
                            sep = ""), fill = "#ca3a3a",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[40% – 30%[")
 
 Conv_040_050 <- ggplot(data = dataset_050, aes(x = PC1, y = PC2)) +
@@ -193,10 +204,12 @@ Conv_040_050 <- ggplot(data = dataset_050, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_label(label = paste("FE = ", dim(dataset_050)[1], "\n", "V   = ", "2.57%",
                            sep = ""), fill = "#c85250",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[50% – 40%[")
 
 Conv_050_060 <- ggplot(data = dataset_060, aes(x = PC1, y = PC2)) +
@@ -210,10 +223,12 @@ Conv_050_060 <- ggplot(data = dataset_060, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_label(label = paste("FE = ", dim(dataset_060)[1], "\n", "V   = ", "8.21%",
                            sep = ""), fill = "#ca663a",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[60% – 50%[")
 
 # High damage
@@ -228,10 +243,12 @@ Conv_060_070 <- ggplot(data = dataset_070, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_label(label = paste("FE = ", dim(dataset_070)[1], "\n", "V   = ", "9.13%",
                            sep = ""), fill = "#ff8c24",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[70% – 60%[")
 
 Conv_070_080 <- ggplot(data = dataset_080, aes(x = PC1, y = PC2)) +
@@ -244,11 +261,13 @@ Conv_070_080 <- ggplot(data = dataset_080, aes(x = PC1, y = PC2)) +
              col = "black", fill = "#ffa654", size = 5, shape = 21, alpha = .05) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   geom_label(label = paste("FE = ", dim(dataset_080)[1], "\n", "V   = ", "11.2%",
                            sep = ""), fill = "#ffa654",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[80% – 70%[")
 
 Conv_080_090 <- ggplot(data = dataset_090, aes(x = PC1, y = PC2)) +
@@ -262,11 +281,13 @@ Conv_080_090 <- ggplot(data = dataset_090, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   geom_label(label = paste("FE = ", dim(dataset_090)[1], "\n", "V   = ", "22.3%",
                            sep = ""), fill = "#ffdc54",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[90% – 80%[")
 
 Conv_090_100 <- ggplot(data = dataset_100, aes(x = PC1, y = PC2)) +
@@ -280,13 +301,15 @@ Conv_090_100 <- ggplot(data = dataset_100, aes(x = PC1, y = PC2)) +
   geom_point(aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none",
-        panel.border = element_rect(colour = "black", fill=NA, linewidth=1)) + 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+        axis.text = element_blank(),
+        title = element_text(size = 14)) + 
   geom_label(label = paste("FE = ", dim(dataset_100)[1], "\n", "V   = ", "37.1%",
                            sep = ""), fill = "#f1f292",
-             x = 0.05, y = 0.55, hjust = 0, size = 4) +
+             x = 0.08, y = 0.55, hjust = 0, size = 4) +
   ggtitle("[100% – 90%[")
 
 Figure_3 <- Base + ((Conv_090_100 + Conv_080_090 + Conv_070_080) / (Conv_060_070 + Conv_050_060 + Conv_040_050) /
                       (Conv_030_040 + Conv_020_030 + Conv_010_020))
 
-#ggsave(Figure_3, filename = "Figure_3.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
+# ggsave(Figure_3, filename = "Figure_3.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)

@@ -8,6 +8,9 @@ data_heatmap_FE <- Global_dataset %>% inner_join(fe_6D_coord_df, by = "FE") %>%
                 drivers_abiotic, drivers_abiotic_other, drivers_biotic_group,
                 drivers_biotic, drivers_biotic_other, PC1, PC2, PC3, PC4, PC5, PC6) 
 
+data_heatmap_FE$drivers_abiotic[data_heatmap_FE$drivers_abiotic == "Increase of turbidity / sedimentation"] =
+  "Increase of turbidity"
+
 ## ABIOTIC
 ### Abiotic subgroups
 data_heatmap_FE_abiotic_summ = data_heatmap_FE %>% 
@@ -85,7 +88,8 @@ Figure_4A <- ggplot(data_heatmap_FE_abiotic_summ, aes(year, drivers_abiotic, fil
   scale_y_discrete(name = "") +
   theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
         panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+        axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 15))
 
 ### Abiotic group
 data_heatmap_FE_abiotic_summ = data_heatmap_FE %>% 
@@ -153,7 +157,7 @@ colnames(data_heatmap_FE_abiotic_summ)[3] <- "Volume"
 data_heatmap_FE_abiotic_summ <- data_heatmap_FE_abiotic_summ %>% data.frame() %>% 
   full_join(data_to_fill, by = "year") %>% 
   complete(year) %>% 
-  mutate(drivers_abiotic = "Overall abiotic pressures")
+  mutate(drivers_abiotic = "Overall abiotic \npressures")
 
 Figure_4B <- ggplot(data_heatmap_FE_abiotic_summ, aes(year, drivers_abiotic, fill= Volume)) + 
   geom_tile(col = "black") + theme_bw() +
@@ -166,7 +170,7 @@ Figure_4B <- ggplot(data_heatmap_FE_abiotic_summ, aes(year, drivers_abiotic, fil
   scale_y_discrete(name = "") +
   theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
         panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
-        axis.text.y = element_text(face="bold"),
+        axis.text.y = element_text(face="bold", size = 15),
         axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
 ## BIOTIC
@@ -244,7 +248,8 @@ Figure_4C <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic_group,
   scale_y_discrete(name = "") +
   theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
         panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
-        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+        axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+        axis.text.y = element_text(size = 15))
 
 ### biotic group
 data_heatmap_FE_biotic_summ = data_heatmap_FE %>% 
@@ -312,7 +317,7 @@ colnames(data_heatmap_FE_biotic_summ)[3] <- "Volume"
 data_heatmap_FE_biotic_summ <- data_heatmap_FE_biotic_summ %>% data.frame() %>% 
   full_join(data_to_fill, by = "year") %>% 
   complete(year) %>% 
-  mutate(drivers_biotic = "Overall biotic pressures")
+  mutate(drivers_biotic = "Overall biotic \npressures")
 
 Figure_4D <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic, fill= Volume)) + 
   geom_tile(col = "black") + theme_bw() +
@@ -325,7 +330,7 @@ Figure_4D <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic, fill=
   scale_y_discrete(name = "") +
   theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
         panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
-        axis.text.y = element_text(face="bold"),
+        axis.text.y = element_text(face="bold", size = 15),
         axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
 ## BIOTIC & ABIOTIC
@@ -374,7 +379,7 @@ colnames(data_heatmap_FE_all_summ)[3] <- "Volume"
 data_heatmap_FE_all_summ <- data_heatmap_FE_all_summ %>% data.frame() %>% 
   full_join(data_to_fill, by = "year") %>% 
   complete(year) %>% 
-  mutate(drivers_all = "Overall biotic & \n abiotic pressures")
+  mutate(drivers_all = "Overall biotic & \nabiotic pressures")
 
 Figure_4E <- ggplot(data_heatmap_FE_all_summ, aes(year, drivers_all, fill= Volume)) + 
   geom_tile(col = "black") + theme_bw() +
@@ -387,7 +392,8 @@ Figure_4E <- ggplot(data_heatmap_FE_all_summ, aes(year, drivers_all, fill= Volum
   scale_y_discrete(name = "") +
   theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
         panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
-        axis.text.y = element_text(face="bold"))
+        axis.text.y = element_text(size = 15, face="bold"),
+        axis.text.x = element_text(size = 15))
 
 Figure_4 <- Figure_4A / plot_spacer() / Figure_4B / Figure_4C / plot_spacer() / Figure_4D / Figure_4E + 
   plot_layout(heights = c(5, -1.25, 1, 4, -1.25, 1, 1), guides = 'collect') & 

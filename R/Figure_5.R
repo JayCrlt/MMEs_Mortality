@@ -61,9 +61,9 @@ conv_hull_es = data_spatial_es %>% data.frame %>% slice(chull(PC1, PC2))
 PCA_Western <- ggplot() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
+  geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#CC66CC") +
   geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
+  geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "#CC66CC", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), panel.grid = element_line(colour = NA)) + 
   ggtitle("Western Basin")
@@ -71,9 +71,9 @@ PCA_Western <- ggplot() +
 PCA_Central <- ggplot() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
+  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#CC66CC") +
   geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
+  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#CC66CC", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), panel.grid = element_line(colour = NA)) + 
   ggtitle("Central Basin")
@@ -81,9 +81,9 @@ PCA_Central <- ggplot() +
 PCA_Eastern <- ggplot() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
+  geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#CC66CC") +
   geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
+  geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "#CC66CC", size = 5, shape = 21) +
   theme_minimal() +  
   theme(legend.position = "none", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), panel.grid = element_line(colour = NA)) + 
   ggtitle("Eastern Basin")
@@ -216,7 +216,7 @@ WT1 <- Feed_tot %>% mutate(feeding_ws_perc = (feeding_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`6.feeding`, y=feeding_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`6.feeding`, y=feeding_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`6.feeding`, y=feeding_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -236,7 +236,7 @@ WT2 <- Long_tot %>% mutate(age_ws_perc = (age_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`3.longevity`, y=age_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`3.longevity`, y=age_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`3.longevity`, y=age_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -256,7 +256,7 @@ WT3 <- Soli_tot %>% mutate(social_ws_perc = (social_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`2.solitary.colonial`, y=social_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`2.solitary.colonial`, y=social_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`2.solitary.colonial`, y=social_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -275,7 +275,7 @@ WT4 <- Morp_tot %>% mutate(morpho_ws_perc = (morpho_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`1.morphology`, y=morpho_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`1.morphology`, y=morpho_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`1.morphology`, y=morpho_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -295,7 +295,7 @@ WT5 <- Stor_tot %>% mutate(storage_ws_perc = (storage_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`10.carbon.storage`, y=storage_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`10.carbon.storage`, y=storage_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`10.carbon.storage`, y=storage_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -315,7 +315,7 @@ WT6 <- Ener_tot %>% mutate(energy_ws_perc = (energy_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`5.energetic.resource`, y=energy_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`5.energetic.resource`, y=energy_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`5.energetic.resource`, y=energy_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -335,7 +335,7 @@ WT7 <- Heig_tot %>% dplyr::filter(`4.height` != 0) %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`4.height`, y=height_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`4.height`, y=height_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`4.height`, y=height_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -356,7 +356,7 @@ WT8 <- Grow_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`7.growth.rates`, y=growth_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`7.growth.rates`, y=growth_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`7.growth.rates`, y=growth_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -377,7 +377,7 @@ WT9 <- Calc_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`8.calcification`, y=calcif_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`8.calcification`, y=calcif_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`8.calcification`, y=calcif_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -398,7 +398,7 @@ WT10 <- Mobi_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`9.mobility`, y=mobility_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`9.mobility`, y=mobility_ws_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`9.mobility`, y=mobility_ws_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -407,11 +407,11 @@ WT10 <- Mobi_tot %>%
         text = element_text(size = 30))
 ### All merged
 WT_Panel_0 <- ggplot() +
-  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
-  geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
-  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white", linewidth = 1) +
+  geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
+  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 12, shape = 21, alpha = .75) +
+  geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
   theme_minimal() +  
   scale_x_continuous(name = "") + scale_y_continuous(name = "") +
   theme(legend.position = "none", 
@@ -439,7 +439,7 @@ CT1 <- Feed_tot %>% mutate(feeding_ws_perc = (feeding_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`6.feeding`, y=feeding_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`6.feeding`, y=feeding_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`6.feeding`, y=feeding_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -459,7 +459,7 @@ CT2 <- Long_tot %>% mutate(age_ws_perc = (age_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`3.longevity`, y=age_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`3.longevity`, y=age_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`3.longevity`, y=age_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -479,7 +479,7 @@ CT3 <- Soli_tot %>% mutate(social_ws_perc = (social_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`2.solitary.colonial`, y=social_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`2.solitary.colonial`, y=social_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`2.solitary.colonial`, y=social_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -498,7 +498,7 @@ CT4 <- Morp_tot %>% mutate(morpho_ws_perc = (morpho_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`1.morphology`, y=morpho_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`1.morphology`, y=morpho_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`1.morphology`, y=morpho_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -518,7 +518,7 @@ CT5 <- Stor_tot %>% mutate(storage_ws_perc = (storage_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`10.carbon.storage`, y=storage_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`10.carbon.storage`, y=storage_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`10.carbon.storage`, y=storage_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -538,7 +538,7 @@ CT6 <- Ener_tot %>% mutate(energy_ws_perc = (energy_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`5.energetic.resource`, y=energy_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`5.energetic.resource`, y=energy_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`5.energetic.resource`, y=energy_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -558,7 +558,7 @@ CT7 <- Heig_tot %>% dplyr::filter(`4.height` != 0) %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`4.height`, y=height_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`4.height`, y=height_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`4.height`, y=height_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -579,7 +579,7 @@ CT8 <- Grow_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`7.growth.rates`, y=growth_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`7.growth.rates`, y=growth_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`7.growth.rates`, y=growth_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -600,7 +600,7 @@ CT9 <- Calc_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`8.calcification`, y=calcif_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`8.calcification`, y=calcif_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`8.calcification`, y=calcif_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -621,7 +621,7 @@ CT10 <- Mobi_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`9.mobility`, y=mobility_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`9.mobility`, y=mobility_ct_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`9.mobility`, y=mobility_ct_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -630,11 +630,11 @@ CT10 <- Mobi_tot %>%
         text = element_text(size = 30))
 ### All merged
 CT_Panel_0 <- ggplot() +
-  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
-  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 5, shape = 21) +
-  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
+  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
+  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 12, shape = 21, alpha = .75) +
+  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
   theme_minimal() +  
   scale_x_continuous(name = "") + scale_y_continuous(name = "") +
   theme(legend.position = "none", 
@@ -662,7 +662,7 @@ ES1 <- Feed_tot %>% mutate(feeding_ws_perc = (feeding_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`6.feeding`, y=feeding_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`6.feeding`, y=feeding_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`6.feeding`, y=feeding_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -682,7 +682,7 @@ ES2 <- Long_tot %>% mutate(age_ws_perc = (age_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`3.longevity`, y=age_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`3.longevity`, y=age_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`3.longevity`, y=age_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -702,7 +702,7 @@ ES3 <- Soli_tot %>% mutate(social_ws_perc = (social_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`2.solitary.colonial`, y=social_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`2.solitary.colonial`, y=social_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`2.solitary.colonial`, y=social_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -721,7 +721,7 @@ ES4 <- Morp_tot %>% mutate(morpho_ws_perc = (morpho_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`1.morphology`, y=morpho_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`1.morphology`, y=morpho_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`1.morphology`, y=morpho_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -741,7 +741,7 @@ ES5 <- Stor_tot %>% mutate(storage_ws_perc = (storage_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`10.carbon.storage`, y=storage_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`10.carbon.storage`, y=storage_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`10.carbon.storage`, y=storage_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -761,7 +761,7 @@ ES6 <- Ener_tot %>% mutate(energy_ws_perc = (energy_ws / Nb_of_obs)*100,
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`5.energetic.resource`, y=energy_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`5.energetic.resource`, y=energy_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`5.energetic.resource`, y=energy_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -781,7 +781,7 @@ ES7 <- Heig_tot %>% dplyr::filter(`4.height` != 0) %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`4.height`, y=height_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`4.height`, y=height_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`4.height`, y=height_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -802,7 +802,7 @@ ES8 <- Grow_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`7.growth.rates`, y=growth_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`7.growth.rates`, y=growth_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`7.growth.rates`, y=growth_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -823,7 +823,7 @@ ES9 <- Calc_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`8.calcification`, y=calcif_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`8.calcification`, y=calcif_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`8.calcification`, y=calcif_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -844,7 +844,7 @@ ES10 <- Mobi_tot %>%
   geom_segment(aes(y = 50, x = -Inf, yend = 50, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_segment(aes(y = 75, x = -Inf, yend = 75, xend = Inf), linetype = "dotted", alpha = .25) +
   geom_bar(aes(x=`9.mobility`, y=mobility_tot_perc), color = "black", fill = "white", stat="identity", width = 0.5) +
-  geom_bar(aes(x=`9.mobility`, y=mobility_es_perc), fill = "#6D4F4B", color = "black", stat="identity", width = 0.5) +
+  geom_bar(aes(x=`9.mobility`, y=mobility_es_perc), fill = "#CC66CC", color = "black", stat="identity", width = 0.5) +
   scale_y_continuous(breaks = seq(25,75,25), name = "", limits = c(0,100)) +
   scale_x_discrete(name = "") +
   theme(axis.line = element_blank(),
@@ -853,17 +853,31 @@ ES10 <- Mobi_tot %>%
         text = element_text(size = 30))
 ### All merged
 ES_Panel_0 <- ggplot() +
-  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.4, inherit.aes = F) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
-  geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#6D4F4B") +
-  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 3, shape = 21) +
-  geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "#6D4F4B", size = 5, shape = 21) +
+  geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
+  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 12, shape = 21, alpha = .75) +
+  geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
   theme_minimal() +  
   scale_x_continuous(name = "") + scale_y_continuous(name = "") +
   theme(legend.position = "none", 
         panel.border = element_rect(colour = "black", fill=NA, linewidth=1), 
         panel.grid = element_line(colour = NA),
         axis.text = element_blank()) 
+
+CT_Panel_0 <- ggplot() +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", inherit.aes = F) +
+  geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
+  geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
+  geom_point(data = data_spatial, aes(x = PC1, y = PC2), col = "black", fill = "white", size = 12, shape = 21, alpha = .75) +
+  geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
+  theme_minimal() +  
+  scale_x_continuous(name = "") + scale_y_continuous(name = "") +
+  theme(legend.position = "none", 
+        panel.border = element_rect(colour = "black", fill=NA, linewidth=1), 
+        panel.grid = element_line(colour = NA),
+        axis.text = element_blank()) 
+
 ES_Panel_1 <- (ES1 + ES2 + ES3) + plot_layout(heights = c(7,5,2), nrow = 3) + plot_annotation(tag_levels = 'A')
 ES_Panel_2 <- (ES4 + ES5 + ES6) + plot_layout(heights = c(8,3,3), nrow = 3) + plot_annotation(tag_levels = list(c("D", "E", "F")))
 ES_Panel_3 <- (ES7 + ES8 + ES9 + ES10) + plot_layout(heights = c(5,5,2,2), nrow = 4) + plot_annotation(tag_levels = list(c("G", "H", "I", "J")))
@@ -877,18 +891,722 @@ EASTERN_subplot <- cowplot::plot_grid(ES_Panel_1 & theme(axis.text = element_tex
                                       ES_Panel_2 & theme(axis.text = element_text(size = 12)), 
                                       ES_Panel_3 & theme(axis.text = element_text(size = 12)), ncol = 3)
 
-### Save Figures
-# ggsave(WESTERN, filename = "../Figures/Figure_5_West.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
-# ggsave(CENTRAL, filename = "../Figures/Figure_5_Cent.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
-# ggsave(EASTERN, filename = "../Figures/Figure_5_East.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
+CENTRAL_subplot <- cowplot::plot_grid(CT_Panel_1 & theme(axis.text = element_text(size = 12)), 
+                                      CT_Panel_2 & theme(axis.text = element_text(size = 12)), 
+                                      CT_Panel_3 & theme(axis.text = element_text(size = 12)), ncol = 3)
 
-ggsave(ES1, filename = "../Figures/Figure_5/ES01", device = "png", width = 5, height = 7, units = "in", dpi = 300)
-ggsave(ES2, filename = "../Figures/Figure_5/ES02", device = "png", width = 5, height = 5, units = "in", dpi = 300)
-ggsave(ES3, filename = "../Figures/Figure_5/ES03", device = "png", width = 5, height = 2, units = "in", dpi = 300)
-ggsave(ES4, filename = "../Figures/Figure_5/ES04", device = "png", width = 5, height = 8, units = "in", dpi = 300)
-ggsave(ES5, filename = "../Figures/Figure_5/ES05", device = "png", width = 5, height = 3, units = "in", dpi = 300)
-ggsave(ES6, filename = "../Figures/Figure_5/ES06", device = "png", width = 5, height = 3, units = "in", dpi = 300)
-ggsave(ES7, filename = "../Figures/Figure_5/ES07", device = "png", width = 5, height = 5, units = "in", dpi = 300)
-ggsave(ES8, filename = "../Figures/Figure_5/ES08", device = "png", width = 5, height = 5, units = "in", dpi = 300)
-ggsave(ES9, filename = "../Figures/Figure_5/ES09", device = "png", width = 5, height = 2, units = "in", dpi = 300)
-ggsave(ES10, filename = "../Figures/Figure_5/ES10", device = "png", width = 5, height = 2, units = "in", dpi = 300)
+WESTERN_subplot <- cowplot::plot_grid(WT_Panel_1 & theme(axis.text = element_text(size = 12)), 
+                                      WT_Panel_2 & theme(axis.text = element_text(size = 12)), 
+                                      WT_Panel_3 & theme(axis.text = element_text(size = 12)), ncol = 3)
+
+### Last Pannel
+
+data_heatmap_FE_ER <- Global_dataset %>% inner_join(fe_6D_coord_df, by = "FE") %>% 
+  dplyr::select(FE, year, ecoregion, `damaged_percentatge`, `damaged_qualitative`,
+                drivers_abiotic, drivers_abiotic_other, drivers_biotic_group,
+                drivers_biotic, drivers_biotic_other, PC1, PC2, PC3, PC4, PC5, PC6) 
+
+### Abiotic group
+data_heatmap_FE_abiotic_summ_ER_WT = data_heatmap_FE_ER %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None"),
+                ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 26,1))
+
+data_heatmap_FE_abiotic_summ_sel_ER_WT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 26,1)) %>% 
+  dplyr::filter(n > 4)
+
+data_heatmap_FE_abiotic_summ_sel_ER_WT <- data_heatmap_FE_abiotic_summ_sel_ER_WT$ID
+
+data_heatmap_FE_abiotic_ER_WT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_abiotic_summ_sel_ER_WT) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_abiotic_ER_WT[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_abiotic_summ_sel_ER_WT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 26,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_abiotic_summ_sel_ER_WT <- data_heatmap_FE_abiotic_summ_sel_ER_WT$ID
+
+for (i in data_heatmap_FE_abiotic_summ_sel_ER_WT) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_abiotic_ER_WT[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_abiotic_summ_ER_WT <- data_heatmap_FE_abiotic_summ_ER_WT %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_abiotic_summ_ER_WT <- cbind(data_heatmap_FE_abiotic_summ_ER_WT, c(V$., 0))
+colnames(data_heatmap_FE_abiotic_summ_ER_WT)[3] <- "Volume"
+
+data_heatmap_FE_abiotic_summ_ER_WT <- data_heatmap_FE_abiotic_summ_ER_WT %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_abiotic = "A")
+
+Figure_5A4 <- ggplot(data_heatmap_FE_abiotic_summ_ER_WT, aes(year, drivers_abiotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold", size = 15),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+### biotic group
+data_heatmap_FE_biotic_summ_ER_WT = data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 13, 1))
+
+data_heatmap_FE_biotic_summ_sel_ER_WT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 13,1)) %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_biotic_summ_sel_ER_WT <- data_heatmap_FE_biotic_summ_sel_ER_WT$ID
+
+data_heatmap_FE_biotic_ER_WT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_biotic_summ_sel_ER_WT) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_biotic_ER_WT[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_biotic_summ_sel_ER_WT <- data_heatmap_FE_ER %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  dplyr::filter(ecoregion %in% c("Alboran Sea", "Western Mediterranean")) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 13,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_biotic_summ_sel_ER_WT <- c(data_heatmap_FE_biotic_summ_sel_ER_WT$ID)
+
+for (i in data_heatmap_FE_biotic_summ_sel_ER_WT) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_biotic_ER_WT[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_biotic_summ_ER_WT <- data_heatmap_FE_biotic_summ_ER_WT %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_biotic_summ_ER_WT <- cbind(data_heatmap_FE_biotic_summ_ER_WT, c(V$., 0))
+colnames(data_heatmap_FE_biotic_summ_ER_WT)[3] <- "Volume"
+
+data_heatmap_FE_biotic_summ_ER_WT <- data_heatmap_FE_biotic_summ_ER_WT %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_biotic = "B")
+
+Figure_5B4 <- ggplot(data_heatmap_FE_biotic_summ_ER_WT, aes(year, drivers_biotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold", size = 15),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+## BIOTIC & ABIOTIC
+data_heatmap_FE_all_summ_1_ER_WT = data_heatmap_FE_biotic_ER_WT %>% bind_rows()
+data_heatmap_FE_all_summ_2_ER_WT = data_heatmap_FE_abiotic_ER_WT %>% bind_rows()
+data_heatmap_FE_all_summ_ER_WT   = rbind(data_heatmap_FE_all_summ_1_ER_WT[,-1], 
+                                         data_heatmap_FE_all_summ_2_ER_WT[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 27, 1))
+
+data_heatmap_FE_all_summ_sel_ER_WT <- data_heatmap_FE_all_summ_ER_WT %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_all_summ_sel_ER_WT <- data_heatmap_FE_all_summ_sel_ER_WT$ID
+
+data_heatmap_FE_all_ER_WT <- rbind(data_heatmap_FE_all_summ_1_ER_WT[,-1], 
+                                   data_heatmap_FE_all_summ_2_ER_WT[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>%  
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_all_summ_sel_ER_WT) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_all_ER_WT[[i]][,3:6] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_all_summ_sel_ER_WT <- data_heatmap_FE_all_summ_ER_WT %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_all_summ_sel_ER_WT <- c(data_heatmap_FE_all_summ_sel_ER_WT$ID)
+
+for (i in data_heatmap_FE_all_summ_sel_ER_WT) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_all_ER_WT[[i]][,3:4] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+data_heatmap_FE_all_summ_ER_WT <- data_heatmap_FE_all_summ_ER_WT %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_all_summ_ER_WT <- cbind(data_heatmap_FE_all_summ_ER_WT, c(V,0))
+colnames(data_heatmap_FE_all_summ_ER_WT)[3] <- "Volume"
+
+data_heatmap_FE_all_summ_ER_WT <- data_heatmap_FE_all_summ_ER_WT %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_all = "C")
+
+Figure_5C4 <- ggplot(data_heatmap_FE_all_summ_ER_WT, aes(year, drivers_all, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1990,2020,10), name = "") +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust=0.5)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(size = 15, face="bold"),
+        axis.text.x = element_text(size = 20))
+
+Figure_5C_WT <- Figure_5A4 / Figure_5B4 / Figure_5C4 + 
+  plot_layout(heights = c(1, 1, 1), guides = 'collect') & 
+  theme(legend.position = 'bottom') &
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8),
+                                               name = "Functional volume affected \n(sqrt transformation) (%)")
+
+### Last Pannel – CENTRAL
+
+### Abiotic group
+data_heatmap_FE_abiotic_summ_ER_CT = data_heatmap_FE_ER %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None"),
+                ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 17,1))
+
+data_heatmap_FE_abiotic_summ_sel_ER_CT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 17,1)) %>% 
+  dplyr::filter(n > 4)
+
+data_heatmap_FE_abiotic_summ_sel_ER_CT <- data_heatmap_FE_abiotic_summ_sel_ER_CT$ID
+
+data_heatmap_FE_abiotic_ER_CT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_abiotic_summ_sel_ER_CT) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_abiotic_ER_CT[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_abiotic_summ_sel_ER_CT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 17,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_abiotic_summ_sel_ER_CT <- data_heatmap_FE_abiotic_summ_sel_ER_CT$ID
+
+for (i in data_heatmap_FE_abiotic_summ_sel_ER_CT) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_abiotic_ER_CT[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_abiotic_summ_ER_CT <- data_heatmap_FE_abiotic_summ_ER_CT %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_abiotic_summ_ER_CT <- cbind(data_heatmap_FE_abiotic_summ_ER_CT, c(V$., 0))
+colnames(data_heatmap_FE_abiotic_summ_ER_CT)[3] <- "Volume"
+
+data_heatmap_FE_abiotic_summ_ER_CT <- data_heatmap_FE_abiotic_summ_ER_CT %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_abiotic = "A")
+
+Figure_5A5 <- ggplot(data_heatmap_FE_abiotic_summ_ER_CT, aes(year, drivers_abiotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold", size = 15),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+### biotic group
+data_heatmap_FE_biotic_summ_ER_CT = data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 7, 1))
+
+data_heatmap_FE_biotic_summ_sel_ER_CT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 7,1)) %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_biotic_summ_sel_ER_CT <- data_heatmap_FE_biotic_summ_sel_ER_CT$ID
+
+data_heatmap_FE_biotic_ER_CT <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_biotic_summ_sel_ER_CT) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_biotic_ER_CT[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_biotic_summ_sel_ER_CT <- data_heatmap_FE_ER %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  dplyr::filter(ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra")) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 7,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_biotic_summ_sel_ER_CT <- c(data_heatmap_FE_biotic_summ_sel_ER_CT$ID)
+
+for (i in data_heatmap_FE_biotic_summ_sel_ER_CT) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_biotic_ER_CT[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_biotic_summ_ER_CT <- data_heatmap_FE_biotic_summ_ER_CT %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_biotic_summ_ER_CT <- cbind(data_heatmap_FE_biotic_summ_ER_CT, c(V$., 0))
+colnames(data_heatmap_FE_biotic_summ_ER_CT)[3] <- "Volume"
+
+data_heatmap_FE_biotic_summ_ER_CT <- data_heatmap_FE_biotic_summ_ER_CT %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_biotic = "B")
+
+Figure_5B5 <- ggplot(data_heatmap_FE_biotic_summ_ER_CT, aes(year, drivers_biotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold", size = 15),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+## BIOTIC & ABIOTIC
+data_heatmap_FE_all_summ_1_ER_CT = data_heatmap_FE_biotic_ER_CT %>% bind_rows()
+data_heatmap_FE_all_summ_2_ER_CT = data_heatmap_FE_abiotic_ER_CT %>% bind_rows()
+data_heatmap_FE_all_summ_ER_CT   = rbind(data_heatmap_FE_all_summ_1_ER_CT[,-1], 
+                                         data_heatmap_FE_all_summ_2_ER_CT[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 17, 1))
+
+data_heatmap_FE_all_summ_sel_ER_CT <- data_heatmap_FE_all_summ_ER_CT %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_all_summ_sel_ER_CT <- data_heatmap_FE_all_summ_sel_ER_CT$ID
+
+data_heatmap_FE_all_ER_CT <- rbind(data_heatmap_FE_all_summ_1_ER_CT[,-1], 
+                                   data_heatmap_FE_all_summ_2_ER_CT[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>%  
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_all_summ_sel_ER_CT) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_all_ER_CT[[i]][,3:6] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_all_summ_sel_ER_CT <- data_heatmap_FE_all_summ_ER_CT %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_all_summ_sel_ER_CT <- c(data_heatmap_FE_all_summ_sel_ER_CT$ID)
+
+for (i in data_heatmap_FE_all_summ_sel_ER_CT) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_all_ER_CT[[i]][,3:4] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+data_heatmap_FE_all_summ_ER_CT <- data_heatmap_FE_all_summ_ER_CT %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_all_summ_ER_CT <- cbind(data_heatmap_FE_all_summ_ER_CT, c(V,0))
+colnames(data_heatmap_FE_all_summ_ER_CT)[3] <- "Volume"
+
+data_heatmap_FE_all_summ_ER_CT <- data_heatmap_FE_all_summ_ER_CT %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_all = "C")
+
+Figure_5C5 <- ggplot(data_heatmap_FE_all_summ_ER_CT, aes(year, drivers_all, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1990,2020,10), name = "") +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust=0.5)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(size = 15, face="bold"),
+        axis.text.x = element_text(size = 20))
+
+Figure_5C_CT <- Figure_5A5 / Figure_5B5 / Figure_5C5 + 
+  plot_layout(heights = c(1, 1, 1), guides = 'collect') & 
+  theme(legend.position = 'bottom') &
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8),
+                                               name = "Functional volume affected \n(sqrt transformation) (%)")
+
+### Last Pannel – Eastern
+
+### Abiotic group
+data_heatmap_FE_abiotic_summ_ER_ES = data_heatmap_FE_ER %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None"),
+                ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 9,1))
+
+data_heatmap_FE_abiotic_summ_sel_ER_ES <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 9,1)) %>% 
+  dplyr::filter(n > 4)
+
+data_heatmap_FE_abiotic_summ_sel_ER_ES <- data_heatmap_FE_abiotic_summ_sel_ER_ES$ID
+
+data_heatmap_FE_abiotic_ER_ES <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_abiotic_summ_sel_ER_ES[-2]) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_abiotic_ER_ES[[i]][,2:5] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_abiotic_summ_sel_ER_ES <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_abiotic, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_abiotic %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 9,1)) %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_abiotic_summ_sel_ER_ES <- data_heatmap_FE_abiotic_summ_sel_ER_ES$ID
+
+for (i in c(data_heatmap_FE_abiotic_summ_sel_ER_ES,8)) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_abiotic_ER_ES[[i]][,2:3] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
+
+data_heatmap_FE_abiotic_summ_ER_ES <- data_heatmap_FE_abiotic_summ_ER_ES %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_abiotic_summ_ER_ES <- cbind(data_heatmap_FE_abiotic_summ_ER_ES, c(V$.))
+colnames(data_heatmap_FE_abiotic_summ_ER_ES)[3] <- "Volume"
+
+data_heatmap_FE_abiotic_summ_ER_ES <- data_heatmap_FE_abiotic_summ_ER_ES %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_abiotic = "A")
+
+Figure_5A6 <- ggplot(data_heatmap_FE_abiotic_summ_ER_ES, aes(year, drivers_abiotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold", size = 15),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+### biotic group
+data_heatmap_FE_biotic_summ_ER_ES = data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 4, 1))
+
+data_heatmap_FE_biotic_summ_sel_ER_ES <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 4,1)) %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_biotic_summ_sel_ER_ES <- data_heatmap_FE_biotic_summ_sel_ER_ES$ID
+
+data_heatmap_FE_biotic_ER_ES <- data_heatmap_FE_ER %>% 
+  dplyr::filter(ecoregion %in% c("Aegean Sea", "Levantine Sea")) %>% 
+  group_by(year, drivers_biotic_group, FE, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
+  summarise(n = n()) %>% 
+  dplyr::select(., -n) %>% 
+  dplyr::filter(drivers_biotic_group %notin% c(NA, "None")) %>% 
+  distinct(., year, FE) %>% 
+  group_by(year) %>% 
+  group_split()
+
+data_heatmap_FE_biotic_summ_ER_ES = data.frame(year = seq(1986, 2020, 1),
+                                               n = c(rep(NA,26), 1, rep(NA, 2), 2, rep(NA, 2), 1, NA, 1),
+                                               Volume = c(rep(NA,26), 0, rep(NA, 2), 0, rep(NA, 2), 0, NA, 0))
+
+data_heatmap_FE_biotic_summ_ER_ES <- data_heatmap_FE_biotic_summ_ER_ES %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_biotic = "B")
+
+Figure_5B6 <- ggplot(data_heatmap_FE_biotic_summ_ER_ES, aes(year, drivers_biotic, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1986,2020,1), name = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(face="bold", size = 15),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
+## BIOTIC & ABIOTIC
+data_heatmap_FE_all_summ_1_ER_ES = data_heatmap_FE_biotic_ER_ES %>% bind_rows()
+data_heatmap_FE_all_summ_2_ER_ES = data_heatmap_FE_abiotic_ER_ES %>% bind_rows()
+data_heatmap_FE_all_summ_ER_ES   = rbind(data_heatmap_FE_all_summ_1_ER_ES[,-1], 
+                                         data_heatmap_FE_all_summ_2_ER_ES[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>% 
+  summarise(n = n()) %>% 
+  mutate(ID = seq(1, 10, 1))
+
+data_heatmap_FE_all_summ_sel_ER_ES <- data_heatmap_FE_all_summ_ER_ES %>% 
+  dplyr::filter(n > 4)
+data_heatmap_FE_all_summ_sel_ER_ES <- data_heatmap_FE_all_summ_sel_ER_ES$ID
+
+data_heatmap_FE_all_ER_ES <- rbind(data_heatmap_FE_all_summ_1_ER_ES[,-1], 
+                                   data_heatmap_FE_all_summ_2_ER_ES[,-1]) %>% 
+  data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% 
+  group_by(year) %>%  
+  group_split()
+
+V = c()
+for (i in data_heatmap_FE_all_summ_sel_ER_ES) {
+  V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_all_ER_ES[[i]][,3:6] %>% distinct() %>% 
+                                      as.matrix())$volume / VTot) * 100, 2))}
+
+data_heatmap_FE_all_summ_sel_ER_ES <- data_heatmap_FE_all_summ_ER_ES %>% 
+  dplyr::filter(n <= 4) %>% 
+  dplyr::filter(n >= 3)
+data_heatmap_FE_all_summ_sel_ER_ES <- c(data_heatmap_FE_all_summ_sel_ER_ES$ID)
+
+for (i in data_heatmap_FE_all_summ_sel_ER_ES) {
+  V[i] = sqrt(round(((cxhull::cxhull(data_heatmap_FE_all_ER_ES[[i]][,3:4] %>% distinct() %>% 
+                                       as.matrix())$volume / 
+                        cxhull::cxhull(data_FE_Affected_PA[,12:13] %>% 
+                                         as.matrix())$volume)^2) * 100, 2))}
+
+data_heatmap_FE_all_summ_ER_ES <- data_heatmap_FE_all_summ_ER_ES %>% 
+  dplyr::select(year, n) 
+data_heatmap_FE_all_summ_ER_ES <- cbind(data_heatmap_FE_all_summ_ER_ES, c(V,0))
+colnames(data_heatmap_FE_all_summ_ER_ES)[3] <- "Volume"
+
+data_heatmap_FE_all_summ_ER_ES <- data_heatmap_FE_all_summ_ER_ES %>% data.frame() %>% 
+  full_join(data_to_fill, by = "year") %>% 
+  complete(year) %>% 
+  mutate(drivers_all = "C")
+
+Figure_5C6 <- ggplot(data_heatmap_FE_all_summ_ER_ES, aes(year, drivers_all, fill= Volume)) + 
+  geom_tile(col = "black") + theme_bw() +
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8)) +
+  scale_x_continuous(breaks = seq(1990,2020,10), name = "") +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust=0.5)) +
+  scale_y_discrete(name = "") +
+  theme(panel.grid.major = element_line(size = 0.5, linewidth = 'solid', colour = "white"), 
+        panel.grid.minor = element_line(size = 0.25, linewidth = 'solid', colour = "white"),
+        axis.text.y = element_text(size = 15, face="bold"),
+        axis.text.x = element_text(size = 20))
+
+Figure_5C_ES <- Figure_5A6 / Figure_5B6 / Figure_5C6 + 
+  plot_layout(heights = c(1, 1, 1), guides = 'collect') & 
+  theme(legend.position = 'bottom') &
+  colorspace::scale_fill_continuous_sequential(na.value = 'white', 
+                                               palette = "Reds", 
+                                               begin = 0, end = 1,
+                                               limits = c(0,8),
+                                               name = "Functional volume affected \n(sqrt transformation) (%)")
