@@ -39,19 +39,29 @@ Fig_2_col  <- c("#ffdc54", "#ff8c24", "#bd0909")
 Fig_3a_col <- c("#999999", "#a2cd5a", "#fa8072", "#483d8b", "#cd6839", "#a52a2a", "#daa520", "#cd3278", "#548b54")
 
 ## Load models
-
+load("../Models/00_General_model.RData")
+load("../Models/01_Feeding_model.RData")
+load("../Models/02_Longevity_model.RData")
+load("../Models/03_Coloniality_model.RData")
+load("../Models/04_Morphology_model.RData")
+load("../Models/05_Storage_model.RData")
+load("../Models/06_Energy_model.RData")
+load("../Models/07_Height_model.RData")
+load("../Models/08_Growth_model.RData")
+load("../Models/09_Calcification_model.RData")
+load("../Models/10_Motility_model.RData")
+load("../Models/11_Stressors_model.RData")
 
 ## Loading Scripts
-source("Script_01_Loading_and_cleaning_dataset.R") # 199 lines
-source("Script_02_Figure_1.R")                     # 008 lines
-source("Script_03_Figure_2.R")                     # 222 lines
-source("Script_04_Figure_3.R")                     # 175 lines
-source("Script_05_Figure_4.R")                     # 170 lines
-source("Script_06_Figure_5.R")                     # XXX lines
-source("Script_07_Bayesian_Models.R")              # XXX lines
+source("Script_01_Cleaning_data.R")   # 199 lines
+source("Script_02_Figure_1.R")        # 008 lines
+source("Script_03_Figure_2.R")        # 222 lines
+source("Script_04_Figure_3.R")        # 175 lines
+source("Script_05_Figure_4.R")        # 170 lines
+source("Script_06_Figure_5.R")        # XXX lines
+source("Script_07_Bayesian_Models.R") # 321 lines
 
 ## Saving Figures
-
 # ggsave(Figure_2, filename = "../Figures/Figure_2.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
 # ggsave(Figure_3, filename = "../Figures/Figure_3.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
 # ggsave(Figure_4, filename = "../Figures/Figure_4.png", device = "png", width = 18.00, height = 7.00, units = "in", dpi = 300)
