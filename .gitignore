@@ -3,9 +3,6 @@
 .RData
 .Ruserdata
 .DS_Store
-Meetings/
 R/Markdowns
-Data/R/data_xlsx_species_to_add.xlsx
-Figures/Conservation_Status – Paper1.png
-Figures/Figures_MME_Mortality.key
+Figures/Keynotes
 Data/GIS/Med_Sea_MMEs.qgz
