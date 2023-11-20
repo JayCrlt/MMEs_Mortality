@@ -219,4 +219,4 @@ F2_J <- ggradar(Storage_trait, values.radar = c("0", "50", "100"), grid.min = 0,
                 legend.text.size = 10) + ggtitle("Carbon storage") + theme(plot.title = element_text(size = 15, face = "bold"))
 
 ### Figure 2 
-Figure_2 = F2_A + F2_B + F2_C + F2_D + F2_E + F2_F + F2_G + F2_H + F2_I + F2_J + plot_layout(guides = "collect", ncol = 5) & theme(legend.position = 'bottom') 
+Figure_2 = F2_F + F2_C + F2_B + F2_A + F2_J + F2_E + F2_D + F2_G + F2_H + F2_I + plot_layout(guides = "collect", ncol = 5) & theme(legend.position = 'bottom') 
