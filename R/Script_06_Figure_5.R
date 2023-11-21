@@ -741,3 +741,13 @@ F5Dc3 <- ggplot(data_heatmap_FE_all_summ_ER_ES, aes(year, drivers_all, fill= Vol
 
 ### F5Dc
 F5Dc <- F5Dc1 / F5Dc2 / F5Dc3 + plot_layout(heights = c(1, 1, 1), guides = 'collect') & theme(legend.position = 'none') 
+
+### Basic statistics
+# Impacted Species
+length(unique(data_barplot_spatial_ws$species[data_barplot_spatial_ws$FE %in% unique(data_spatial_ws$FE)]))
+length(unique(data_barplot_spatial_ct$species[data_barplot_spatial_ct$FE %in% unique(data_spatial_ct$FE)]))
+length(unique(data_barplot_spatial_es$species[data_barplot_spatial_ct$FE %in% unique(data_spatial_ct$FE)]))
+# Present Species
+length(unique(data_barplot_spatial$species[data_barplot_spatial$FE %notin% unique(data_spatial_ws$FE)]))
+length(unique(data_barplot_spatial$species[data_barplot_spatial$FE %notin% unique(data_spatial_ct$FE)]))
+length(unique(data_barplot_spatial$species[data_barplot_spatial$FE %notin% unique(data_spatial_es$FE)]))

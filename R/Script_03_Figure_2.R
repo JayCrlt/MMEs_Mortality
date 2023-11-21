@@ -124,7 +124,7 @@ Energy_trait = data.frame(
 
 F2_E <- ggradar(Energy_trait, values.radar = c("0", "50", "100"), grid.min = 0, grid.mid = 50, grid.max = 100, group.colours = Fig_2_col,
                 fill=TRUE, group.point.size = 1, gridline.mid.colour = "grey", legend.position = "bottom", axis.label.size = 3,
-                axis.labels = c("Photosynthetic \nautotroph", "Photo-\nheterotroph",  "Heterotroph"),
+                axis.labels = c("Photosynthetic-autotroph", "Photo-\nheterotroph",  "Heterotroph"),
                 legend.text.size = 10) + ggtitle("Energetic resources") + theme(plot.title = element_text(size = 15, face = "bold"))
 
 # Feeding
