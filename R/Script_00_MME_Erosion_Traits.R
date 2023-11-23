@@ -58,9 +58,9 @@ source("Script_02_Figure_1.R")        # 008 lines
 source("Script_03_Figure_2.R")        # 222 lines
 source("Script_04_Figure_3.R")        # 200 lines
 source("Script_05_Figure_4.R")        # 170 lines
-source("Script_06_Figure_5.R")        # 743 lines
+source("Script_06_Figure_5.R")        # 753 lines
 source("Script_07_Bayesian_Models.R") # 321 lines
-### Total number of lines:             1863 lines
+### Total number of lines:             1873 lines
 
 ## Saving Figures
 ggsave(Figure_2, filename = "../Figures/raw/Figure_2.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
@@ -72,4 +72,3 @@ ggsave(Figure_4, filename = "../Figures/raw/Figure_4.png", device = "png", width
 # ggsave(Figure_5C_WT, filename = "../Figures/Figure_5C_WT.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
 # ggsave(Figure_5C_CT, filename = "../Figures/Figure_5C_CT.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
 # ggsave(Figure_5C_ES, filename = "../Figures/Figure_5C_ES.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
-
