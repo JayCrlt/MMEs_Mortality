@@ -281,7 +281,7 @@ max(Morphology_predicted$Estimate[Morphology_predicted$Estimate != max(Morpholog
 # Check models
 Single_models = list(Feeding_model, Longevity_model, Coloniality_model, Morphology_model, Storage_model, Energy_model, Height_model, 
                      Growth_model, Calcification_model, Motility_model)
-for (i in 1:10) {print(rstantools::bayes_R2(Single_models[[i]])) ; rstanarm::pp_check(Motility_model, type = "scatter_avg") }
+for (i in 1:10) {print(rstantools::bayes_R2(Single_models[[i]])) ; rstanarm::pp_check(Single_models[[i]], type = "scatter_avg") }
 
 ### Perturbations
 table_pert         <- table(data_model$Perturbations, data_model$FE, data_model$year) %>% data.frame()
@@ -315,7 +315,125 @@ MHW <- pivot_table ; MHW[,c(2,4:5,7,9)] = 0
 MHW %>% mutate(Volume_predicted = predict(volume_trait_quantification, MHW)[,1],
            Volume_Q2.5          = predict(volume_trait_quantification, MHW)[,3],
            Volume_Q97.5         = predict(volume_trait_quantification, MHW)[,4],
-           Volume_sd            = predict(volume_trait_quantification, MHW)[,2]) %>% View()
+           Volume_sd            = predict(volume_trait_quantification, MHW)[,2]) 
 
 for (i in 1:9) { max_values <- apply(pivot_table[c(2:10)], MARGIN = 2, FUN = max) ; max_values[i] = 0
 print(predict(volume_trait_quantification ,data.frame(max_values) %>% t() %>% data.frame())) }
+
+# Define max for each variable
+max_abiotic_others = max(pivot_table$Abiotic_others)
+max_biotic_others  = max(pivot_table$Biotic_others)
+max_disease        = max(pivot_table$Disease)
+max_turbidity      = max(pivot_table$Turbidity_and_Sedimentation)
+max_mucillage      = max(pivot_table$Mucillage)
+max_pollution      = max(pivot_table$Pollution)
+max_predator       = max(pivot_table$Predator_outbreaks)
+max_storms         = max(pivot_table$Storms)
+max_temperature    = max(pivot_table$Temperature_anomaly)
+
+# Define min for each variable
+min_abiotic_others = min(pivot_table$Abiotic_others)
+min_biotic_others  = min(pivot_table$Biotic_others)
+min_disease        = min(pivot_table$Disease)
+min_turbidity      = min(pivot_table$Turbidity_and_Sedimentation)
+min_mucillage      = min(pivot_table$Mucillage)
+min_pollution      = min(pivot_table$Pollution)
+min_predator       = min(pivot_table$Predator_outbreaks)
+min_storms         = min(pivot_table$Storms)
+min_temperature    = min(pivot_table$Temperature_anomaly)
+
+# Define range for each variable
+range_abiotic_others = seq(0, max(pivot_table$Abiotic_others), 1)
+range_biotic_others  = seq(0, max(pivot_table$Biotic_others), 1)
+range_disease        = seq(0, max(pivot_table$Disease), 1)
+range_turbidity      = seq(0, max(pivot_table$Turbidity_and_Sedimentation), 1)
+range_mucillage      = seq(0, max(pivot_table$Mucillage), 1)
+range_pollution      = seq(0, max(pivot_table$Pollution), 1)
+range_predator       = seq(0, max(pivot_table$Predator_outbreaks), 1)
+range_storms         = seq(0, max(pivot_table$Storms), 1)
+range_temperature    = seq(0, max(pivot_table$Temperature_anomaly), 1)
+
+# Estimates for perturbation model
+predicted_data <- expand.grid(Abiotic_others = range_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.abiotic    <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                         Volume_Q2.5         = predict(volume_trait_quantification, predicted_data)[,3],
+                                         Volume_Q97.5        = predict(volume_trait_quantification, predicted_data)[,4], 
+                                         Volume_sd           = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = range_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.biotic     <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                         Volume_Q2.5         = predict(volume_trait_quantification, predicted_data)[,3],
+                                         Volume_Q97.5        = predict(volume_trait_quantification, predicted_data)[,4], 
+                                         Volume_sd           = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = range_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.disease    <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                        Volume_Q2.5          = predict(volume_trait_quantification, predicted_data)[,3],
+                                        Volume_Q97.5         = predict(volume_trait_quantification, predicted_data)[,4], 
+                                        Volume_sd            = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = range_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.turbid     <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                         Volume_Q2.5         = predict(volume_trait_quantification, predicted_data)[,3],
+                                         Volume_Q97.5        = predict(volume_trait_quantification, predicted_data)[,4], 
+                                         Volume_sd           = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = range_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.mucillage  <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                            Volume_Q2.5      = predict(volume_trait_quantification, predicted_data)[,3],
+                                            Volume_Q97.5     = predict(volume_trait_quantification, predicted_data)[,4], 
+                                            Volume_sd        = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = range_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.pollution  <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                            Volume_Q2.5      = predict(volume_trait_quantification, predicted_data)[,3],
+                                            Volume_Q97.5     = predict(volume_trait_quantification, predicted_data)[,4], 
+                                            Volume_sd        = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = range_predator, Storms = min_storms, Temperature_anomaly = min_temperature) 
+(th.predator   <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                            Volume_Q2.5      = predict(volume_trait_quantification, predicted_data)[,3],
+                                            Volume_Q97.5     = predict(volume_trait_quantification, predicted_data)[,4], 
+                                            Volume_sd        = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = range_storms, Temperature_anomaly = min_temperature) 
+(th.storms     <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                           Volume_Q2.5       = predict(volume_trait_quantification, predicted_data)[,3],
+                                           Volume_Q97.5      = predict(volume_trait_quantification, predicted_data)[,4], 
+                                           Volume_sd         = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others = min_biotic_others, Disease = min_disease, 
+                              Turbidity_and_Sedimentation = min_turbidity, Mucillage = min_mucillage, Pollution = min_pollution, 
+                              Predator_outbreaks = min_predator, Storms = min_storms, Temperature_anomaly = range_temperature) 
+(th.temper     <- predicted_data %>% mutate(Volume_predicted = predict(volume_trait_quantification, predicted_data)[,1], 
+                                            Volume_Q2.5      = predict(volume_trait_quantification, predicted_data)[,3],
+                                            Volume_Q97.5     = predict(volume_trait_quantification, predicted_data)[,4], 
+                                            Volume_sd        = predict(volume_trait_quantification, predicted_data)[,2]) %>% 
+    dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% summarise_all(mean))
+
+predicted_pert <- rbind(th.abiotic, th.biotic, th.disease, th.turbid, th.mucillage, th.pollution, th.predator, th.storms, th.temper) %>% 
+  dplyr::select(Volume_predicted, Volume_Q2.5, Volume_Q97.5, Volume_sd) %>% data.frame()
