@@ -215,7 +215,7 @@ balanced_data_model <- rbind(data_model_calc, zero_rows)
 balanced_data_model$transformed_damage <- pmax(0.00001, pmin(0.99999, balanced_data_model$damaged_percentage))
 # Calcification_model <- brms::brm(transformed_damage ~ Calcification, data = balanced_data_model, iter = 2000, warmup = 1000, chains = 2, cores = 2, 
 #                                  family = "zero_one_inflated_beta", backend = "cmdstanr")
-# Prediected
+# Predicted
 theoretical_dataset_Calcification <- expand.grid(Calcification = unique(beta_model_ord$data[,9]), Perturbations = unique(beta_model_ord$data[,12]))
 # Plot coefficient
 Calcification_predicted <- cbind(theoretical_dataset_Calcification, predict(Calcification_model, theoretical_dataset_Calcification)) %>% 
@@ -296,7 +296,7 @@ colnames(pivot_table) = c("Year", "Abiotic_others", "Biotic_others", "Disease", 
 
 # Make the model
 # volume_trait_quantification <- brms::brm(Volume ~ Abiotic_others + Biotic_others + Disease + Turbidity_and_Sedimentation + Mucillage + Pollution + 
-#                                          Predator_outbreaks + Storms + Temperature_anomaly, data = pivot_table, iter = 2000, warmup = 1000, chains = 2, cores = 2, 
+#                                          Predator_outbreaks + Storms + Temperature_anomaly, data = pivot_table, iter = 3000, warmup = 1000, chains = 2, cores = 2, 
 #                                          family = "zero_one_inflated_beta", backend = "cmdstanr") 
 # Predict
 pivot_table <- pivot_table %>% mutate(Volume_predicted = predict(volume_trait_quantification, pivot_table)[,1],
