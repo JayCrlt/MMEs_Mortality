@@ -50,25 +50,25 @@ load("../Models/07_Height_model.RData")
 load("../Models/08_Growth_model.RData")
 load("../Models/09_Calcification_model.RData")
 load("../Models/10_Motility_model.RData")
-load("../Models/11_Stressors_model.RData")
 
-## Loading Scripts
-source("Script_01_Cleaning_data.R")   # 199 lines
-source("Script_02_Figure_1.R")        # 008 lines
-source("Script_03_Figure_2.R")        # 222 lines
-source("Script_04_Figure_3.R")        # 200 lines
-source("Script_05_Figure_4.R")        # 170 lines
-source("Script_06_Figure_5.R")        # 753 lines
-source("Script_07_Bayesian_Models.R") # 439 lines
-### Total number of lines:             1991 lines
+## Loading Scripts – Figure 1 and 2 + 10 BLR 
+source("Script_01_Cleaning_data.R")       # 199 lines
+source("Script_02_Figure_1.R")            # 008 lines
+source("Script_03_Figure_2.R")            # 222 lines
+source("Script_04_Figure_3.R")            # 200 lines
+source("Script_05_Figure_4.R")            # 170 lines
+source("Script_06_Figure_5.R")            # 753 lines
+source("Script_07_Bayesian_Models.R")     # 284 lines
+
+### To get the big picture, we added alive species – Figure 3, 4, 5 + Bayesian GLM
+source("Script_04_Figure_3_alt.R")        # 306 lines
+source("Script_05_Figure_4_alt.R")        # 170 lines
+source("Script_06_Figure_5_alt.R")        # 356 lines
+source("Script_07_Bayesian_Models_alt.R") # 181 lines
+
+### Total number of lines:                 2849 lines
 
 ## Saving Figures
 ggsave(Figure_2, filename = "../Figures/raw/Figure_2.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
 ggsave(Figure_3, filename = "../Figures/raw/Figure_3_alt.png", device = "png", width = 18.00, height = 10.0, units = "in", dpi = 300)
 ggsave(Figure_4, filename = "../Figures/raw/Figure_4_alt.png", device = "png", width = 18.00, height = 7.00, units = "in", dpi = 300)
-# ggsave(WT_Panel_0, filename = "../Figures/WESTERN.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
-# ggsave(CT_Panel_0, filename = "../Figures/CENTRAL.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
-# ggsave(ES_Panel_0, filename = "../Figures/Eastern.png", device = "png", width = 10, height = 8, units = "in", dpi = 300)
-# ggsave(Figure_5C_WT, filename = "../Figures/Figure_5C_WT.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
-# ggsave(Figure_5C_CT, filename = "../Figures/Figure_5C_CT.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)
-# ggsave(Figure_5C_ES, filename = "../Figures/Figure_5C_ES.png", device = "png", width = 10, height = 3.5, units = "in", dpi = 300)

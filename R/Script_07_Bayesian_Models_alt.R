@@ -179,5 +179,3 @@ predicted_data <- expand.grid(Abiotic_others = min_abiotic_others, Biotic_others
 
 predicted_pert <- rbind(th.abiotic, th.biotic, th.disease, th.turbid, th.mucillage, th.pollution, th.predator, th.storms, th.temper) %>% 
   dplyr::select(Volume_predicted, Volume_sd, Volume_Q2.5, Volume_Q97.5) %>% data.frame()
-
-xlsx::write.xlsx(predicted_pert, "predicted_pert.xlsx")
