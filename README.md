@@ -1,11 +1,12 @@
 # Erosion of trait diversity across the Mediterranean Sea following mortality events
-#### J. Carlot, C. Galobart, D. Gómez-Gras, J. Santamaria, R. Golo, M. Sini, E. Cebrian, V. Gerovasileiou,  M. Ponti, E. Turicchia, S. Comeau, G. Rilov, L. Tamburello, T. Pulido Mantas, C. Cerrano, J.B. Ledoux, J.P. Gattuso, S. Ramirez-Calero, L. Millán Agudo,  M. Montefalcone, S. Katsanevakis, N. Bensoussan, J. Garrabou and N. Teixidó
 
 ![GitHub](https://img.shields.io/badge/GitHub-39457E?style=for-the-badge&logo=github&logoColor=white)
 ![Gitlab](https://img.shields.io/badge/GitLab-FFA500?style=for-the-badge&logo=gitlab&logoColor=white)
 ![RStudio](https://img.shields.io/badge/RStudio-75AADB?style=for-the-badge&logo=RStudio&logoColor=white)
 
-### *Abstract*
+#### J. Carlot, C. Galobart, D. Gómez-Gras, J. Santamaria, R. Golo, M. Sini, E. Cebrian, V. Gerovasileiou,  M. Ponti, E. Turicchia, S. Comeau, G. Rilov, L. Tamburello, T. Pulido Mantas, C. Cerrano, J.B. Ledoux, J.P. Gattuso, S. Ramirez-Calero, L. Millán Agudo,  M. Montefalcone, S. Katsanevakis, N. Bensoussan, J. Garrabou and N. Teixidó
+
+### Abstract
 Unraveling the functional pathways of marine ecosystems in the face of global change poses a pressing challenge. This is particularly critical in the Mediterranean Sea, which is one of the most impacted marine basins by human activities. Utilizing species traits and extensive mass mortality events (MMEs) datasets spanning from 1986 to 2020, we investigated the global traits of benthic species that suffered from MMEs due to nine different mortality drivers. By analyzing variation in ten ecological traits of 410 benthic species using the largest dataset of Mediterranean benthic species ever compiled, we identified 236 functional entities (FEs, defined as groups of species sharing the same trait values) and assessed that 56 FEs were impaired. Our results unveiled a risk of trait homogenization, with low trait redundancy, and higher vulnerability in specific trait categories. Notably, 54% of mortality records showed severe impacts, including particularly tree-like and massive forms, slow growth rates, calcifying species and large individuals. Specifically, 29 FEs suffered extreme mortality (higher than 90%), impacting in turn 18.4% of the species trait volume. Besides, we also highlight that 10.9% of the trait volume is impaired over the last five years across the Mediterranean, showcasing the risk of a rapid ecological transformation of the Mediterranean Sea.
 
 Scripts and data for Erosion of trait diversity across the Mediterranean Sea following mortality events 
@@ -36,12 +37,14 @@ attached base packages:
 [1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] sf_1.0-9                mFD_1.0.3               rgdal_1.6-5             rgeos_0.6-2             sp_2.0-0               
- [6] scales_1.2.1            readxl_1.4.2            plotly_4.10.1           viridis_0.6.2           viridisLite_0.4.1      
-[11] leaflet_2.1.2           mapdata_2.3.1           maps_3.4.1              ggradar_0.2             cmdstanr_0.5.3         
-[16] ggstream_0.1.0          reshape2_1.4.4          sfheaders_0.4.2         networkD3_0.4           patchwork_1.1.2        
-[21] ggspatial_1.1.7.9000    data.tree_1.0.0         lubridate_1.9.2         forcats_1.0.0           stringr_1.5.0          
-[26] dplyr_1.1.0             purrr_1.0.1             readr_2.1.4             tidyr_1.3.0             tibble_3.2.0           
-[31] ggplot2_3.4.1           tidyverse_2.0.0         kableExtra_1.3.4.9000   hrbrthemes_0.8.0        googledrive_2.0.0      
-[36] circlepackeR_0.0.0.9000 rnaturalearth_0.3.2     rnaturalearthdata_0.1.0
+ [1] sf_1.0-9                mFD_1.0.3               rgdal_1.6-5             rgeos_0.6-2            
+ [5] sp_2.0-0                scales_1.2.1            readxl_1.4.2            plotly_4.10.1          
+ [9] viridis_0.6.2           viridisLite_0.4.1       leaflet_2.1.2           mapdata_2.3.1          
+[13] maps_3.4.1              ggradar_0.2             cmdstanr_0.5.3          ggstream_0.1.0         
+[17] reshape2_1.4.4          sfheaders_0.4.2         networkD3_0.4           patchwork_1.1.2        
+[21] ggspatial_1.1.7.9000    data.tree_1.0.0         lubridate_1.9.2         forcats_1.0.0          
+[25] stringr_1.5.0           dplyr_1.1.0             purrr_1.0.1             readr_2.1.4            
+[29] tidyr_1.3.0             tibble_3.2.0            ggplot2_3.4.1           tidyverse_2.0.0        
+[33] kableExtra_1.3.4.9000   hrbrthemes_0.8.0        googledrive_2.0.0       circlepackeR_0.0.0.9000
+[37] rnaturalearth_0.3.2     rnaturalearthdata_0.1.0
 ```
