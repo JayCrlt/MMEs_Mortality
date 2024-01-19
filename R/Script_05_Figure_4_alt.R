@@ -4,7 +4,9 @@ data_complete_all  <- data_complete %>% left_join(data_filtered_MME_Merged_data 
 data_heatmap_FE    <- data_complete_all %>% 
   dplyr::select(FE, year, `damaged_percentatge`, `damaged_qualitative`, drivers_abiotic, drivers_abiotic_other, drivers_biotic_group,
                 drivers_biotic, drivers_biotic_other, PC1, PC2, PC3, PC4, PC5, PC6) %>% 
-  mutate(drivers_abiotic = ifelse(drivers_abiotic == "Increase of turbidity / sedimentation", "Increase of turbidity", drivers_abiotic)) %>% 
+  mutate(drivers_abiotic = ifelse(drivers_abiotic == "Increase of turbidity / sedimentation", "Increase of turbidity", drivers_abiotic)) %>%
+  mutate(drivers_abiotic = ifelse(drivers_abiotic == "Storms", "Storm", drivers_abiotic)) %>%
+  mutate(drivers_biotic_group = ifelse(drivers_biotic_group == "Predator outbreaks", "Predator outbreak", drivers_biotic_group)) %>%
   dplyr::filter(year > 1985)
 
 ## Figure 4A
@@ -30,7 +32,9 @@ for (i in data_heatmap_FE_abiotic_summ_sel) {V[i] = sqrt(round((cxhull::cxhull(d
 V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
 data_to_fill                     <- data.frame(year = seq(1986,2020,1))
 data_heatmap_FE_abiotic_summ     <- data_heatmap_FE_abiotic_summ %>% dplyr::select(year, drivers_abiotic, n) %>% cbind(Volume = c(V$., 0)) %>% data.frame() %>% 
-  full_join(data_to_fill, by = "year") %>% complete(year, drivers_abiotic) %>% drop_na(drivers_abiotic)
+  full_join(data_to_fill, by = "year") %>% complete(year, drivers_abiotic) %>% drop_na(drivers_abiotic) 
+data_heatmap_FE_abiotic_summ$drivers_abiotic <- factor(data_heatmap_FE_abiotic_summ$drivers_abiotic, levels = c("Other", "Increase of turbidity",
+                                                                                                                "Pollution", "Storm", "Temperature anomaly"))
 
 Figure_4A1 <- ggplot(data_heatmap_FE_abiotic_summ, aes(year, drivers_abiotic, fill= Volume)) + geom_tile(col = "black") + theme_bw() +
   colorspace::scale_fill_continuous_sequential(na.value = 'white', palette = "OrYel", begin = 0, end = 1, limits = c(0,6)) +
@@ -95,6 +99,8 @@ for (i in data_heatmap_FE_biotic_summ_sel) {V[i] = sqrt(round((cxhull::cxhull(da
 V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
 data_heatmap_FE_biotic_summ     <- data_heatmap_FE_biotic_summ %>% dplyr::select(year, drivers_biotic_group, n) %>% cbind(., Volume = c(V$., rep(0, 2))) %>% 
   data.frame() %>% full_join(data_to_fill, by = "year") %>% complete(year, drivers_biotic_group) %>% drop_na(drivers_biotic_group)
+data_heatmap_FE_biotic_summ$drivers_biotic_group <- factor(data_heatmap_FE_biotic_summ$drivers_biotic_group, levels = c("Other", "Predator outbreak", 
+                                                                                                                        "Mucilage coverage","Disease"))
 
 Figure_4B1 <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic_group, fill= Volume)) + geom_tile(col = "black") + theme_bw() +
   colorspace::scale_fill_continuous_sequential(na.value = 'white', palette = "OrYel", begin = 0, end = 1, limits = c(0,6)) +

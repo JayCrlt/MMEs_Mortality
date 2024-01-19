@@ -39,7 +39,6 @@ Fig_2_col  <- c("#ffdc54", "#ff8c24", "#bd0909")
 Fig_3a_col <- c("#999999", "#a2cd5a", "#fa8072", "#483d8b", "#cd6839", "#a52a2a", "#daa520", "#cd3278", "#548b54")
 
 ## Load models
-load("../Models/00_General_model.RData")
 load("../Models/01_Feeding_model.RData")
 load("../Models/02_Longevity_model.RData")
 load("../Models/03_Coloniality_model.RData")
