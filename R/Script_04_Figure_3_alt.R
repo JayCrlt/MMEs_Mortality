@@ -7,15 +7,15 @@ if (Complete_traits$Species[i-1] == Complete_traits$Species[i]) {
   Complete_traits$duplicate[i] = "TRUE"} else {Complete_traits$duplicate[i] = "FALSE"} }
 dataset_duplicated    <- Complete_traits %>% dplyr::filter(Species %in% Complete_traits$Species[Complete_traits$duplicate == "TRUE"])
 # Keep the last most up to date version
-dataset_duplicated$priority = NA ; for (i in 1:length(dataset_duplicated$priority)) {
-if (dataset_duplicated$Dataset[i] == "Mortality_MME") {
-  dataset_duplicated$priority[i] = 1} else if (dataset_duplicated$Dataset[i] == "Nuria_GCB_2024"){
-    dataset_duplicated$priority[i] = 2} else if (dataset_duplicated$Dataset[i] == "Golo et al 2024"){
-      dataset_duplicated$priority[i] = 3} else if (dataset_duplicated$Dataset[i] == "Galobart et al 2023"){
-        dataset_duplicated$priority[i] = 4} else { dataset_duplicated$priority[i] = 5 }}
+# dataset_duplicated$priority = NA ; for (i in 1:length(dataset_duplicated$priority)) {
+# if (dataset_duplicated$Dataset[i] == "Mortality_MME") {
+#  dataset_duplicated$priority[i] = 1} else if (dataset_duplicated$Dataset[i] == "Nuria_GCB_2024"){
+#    dataset_duplicated$priority[i] = 2} else if (dataset_duplicated$Dataset[i] == "Golo et al 2024"){
+#      dataset_duplicated$priority[i] = 3} else if (dataset_duplicated$Dataset[i] == "Galobart et al 2023"){
+#        dataset_duplicated$priority[i] = 4} else { dataset_duplicated$priority[i] = 5 }}
 # Final dataset cleaned
 dataset_trait_cleaned <- Complete_traits %>% dplyr::filter(Species %notin% Complete_traits$Species[Complete_traits$duplicate == "TRUE"]) %>% select(-duplicate) %>% 
-  full_join(dataset_duplicated %>% arrange(Species, priority) %>% group_by(Species) %>% slice(1) %>% select(-c(duplicate, priority))) %>% arrange(Species)
+  full_join(dataset_duplicated %>% arrange(Species) %>% group_by(Species) %>% slice(1) %>% select(-c(duplicate))) %>% arrange(Species)
 
 ## Define the FE number
 ### Set up the data frames and define the FEs richness
@@ -50,14 +50,14 @@ fe_fe_dist <- funct.dist(fe_tr, tr_cat[,-3], metric = "gower")
 fe_fspaces <- mFD::quality.fspaces(sp_dist = fe_fe_dist)
 
 ### Looking for how many axes
-# print(round(fe_fspaces$quality_fspaces,3)) #6 dimensions | mAD = 0.055
+# print(round(fe_fspaces$quality_fspaces,2)) #6 dimensions | mAD = 0.055
 fe_6D_coord <- fe_fspaces$details_fspaces$sp_pc_coord[,1:6] %>% data.frame()
 conv_hull_tot = fe_6D_coord %>% slice(chull(PC1, PC2))
 
 # Define the complete dataset
 data_complete <- fe_6D_coord %>% rownames_to_column(var = "FE") %>% left_join(data_sp_to_fe) %>% data.frame() %>% mutate(Impaired = NA)
 for (i in 1:length(data_complete$Impaired)) {
-  if (data_complete$Species[i] %in% Complete_traits$Species[Complete_traits$Dataset == "Mortality_MME"]) {
+  if (data_complete$Species[i] %in% Complete_traits$Species[Complete_traits$Dataset == "Current study"]) {
   data_complete$Impaired[i] = "YES"} else {
   data_complete$Impaired[i] = "NO"}}
 
@@ -66,7 +66,7 @@ data_mortality_from_complete  <- data_complete %>% dplyr::filter(Impaired == "YE
 data_filtered_MME_Merged_data <- MME_Merged_data %>% dplyr::select(year, ecoregion, `sub-ecoregion`, taxa, species, damaged_percentatge, damaged_qualitative,
                                                                    drivers_abiotic, drivers_abiotic_other, drivers_biotic, drivers_biotic_group, drivers_biotic_other)
 data_mortality_from_complete  <- data_mortality_from_complete %>% left_join(data_filtered_MME_Merged_data %>% rename(Species = species)) %>%
-  mutate(row = seq(1, 1858, 1))
+  mutate(row = seq(1, 1856, 1))
 
 ### Clean dataset
 data_mortality_from_complete_mistakes_1 <- data_mortality_from_complete %>% dplyr::filter(damaged_qualitative == "Low", damaged_percentatge >= 30)
@@ -162,8 +162,8 @@ Base <- ggplot() +
   geom_point(data = data_complete_non_impaired, aes(x = PC1, y = PC2, size = nb_sp_within_FE), fill = "white", shape = 21, alpha = .25) +
   geom_point(data = data_complete_impaired, aes(x = PC1, y = PC2, fill = Taxonomy, size = nb_sp_within_FE), shape = 21) +
   scale_x_continuous(name = "PC1 (34.8%)", breaks = seq(-0.4, 0.4, 0.8), limits = c(-0.4, 0.45)) + 
-  scale_y_continuous(name = "PC2 (19.5%)", breaks = seq(-0.4, 0.4, 0.8), limits = c(-0.45, 0.4)) + 
-  theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
+  scale_y_continuous(name = "PC2 (19.4%)", breaks = seq(-0.4, 0.4, 0.8), limits = c(-0.4, 0.45)) + 
+  theme_minimal() + scale_size_continuous(range = c(1,12), breaks = seq(1,12,1), limits = c(0, 12)) + 
   scale_fill_manual(values = Fig_3a_col) + guides(size = guide_legend(nrow = 1), fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_text(size = 14),
         axis.title = element_text(size = 16), title = element_text(size = 14), panel.grid.major = element_blank()) + ggtitle("")
@@ -174,14 +174,14 @@ Conv_010_020  <- ggplot(data = dataset_010, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_010, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#f1f292") +
   geom_point(data = dataset_010, aes(x = PC1, y = PC2), col = "black", fill = "#f1f292", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", 56, "\n", "V   = ", "46.0%", sep = ""), fill = "#f1f292", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - 56, "\n", "V   = ", "54.0%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("[10% – 20%]")
+  geom_label(label = paste("FE = ", 55, "\n", "V   = ", "47.4%", sep = ""), fill = "#f1f292", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - 55, "\n", "V   = ", "52.6%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("≥ 10%")
 
 Conv_020_030 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -189,14 +189,14 @@ Conv_020_030 <- ggplot(data = dataset_030, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_030, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#ffdc54") +
   geom_point(data = dataset_030, aes(x = PC1, y = PC2), col = "black", fill = "#ffdc54", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_030)[1], "\n", "V   = ", "44.6%", sep = ""), fill = "#ffdc54", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_030)[1], "\n", "V   = ", "55.4%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]20% – 30%]")
+  geom_label(label = paste("FE = ", dim(dataset_030)[1], "\n", "V   = ", "43.9%", sep = ""), fill = "#ffdc54", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_030)[1], "\n", "V   = ", "56.1%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 20%")
 
 Conv_030_040 <- ggplot(data = dataset_040, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -204,14 +204,14 @@ Conv_030_040 <- ggplot(data = dataset_040, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_040, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#ffa654") +
   geom_point(data = dataset_040, aes(x = PC1, y = PC2), col = "black", fill = "#ffa654", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_040)[1], "\n", "V   = ", "44.5%", sep = ""), fill = "#ffa654", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_040)[1], "\n", "V   = ", "55.5%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]30% – 40%]")
+  geom_label(label = paste("FE = ", dim(dataset_040)[1], "\n", "V   = ", "43.9%", sep = ""), fill = "#ffa654", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_040)[1], "\n", "V   = ", "56.1%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 30%")
 
 Conv_040_050 <- ggplot(data = dataset_050, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -219,14 +219,14 @@ Conv_040_050 <- ggplot(data = dataset_050, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_050, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#ff8c24") +
   geom_point(data = dataset_050, aes(x = PC1, y = PC2), col = "black", fill = "#ff8c24", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_050)[1], "\n", "V   = ", "41.7%", sep = ""), fill = "#ff8c24", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_050)[1], "\n", "V   = ", "58.3%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]40% – 50%]")
+  geom_label(label = paste("FE = ", dim(dataset_050)[1], "\n", "V   = ", "41.0%", sep = ""), fill = "#ff8c24", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_050)[1], "\n", "V   = ", "59.0%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 40%")
 
 Conv_050_060 <- ggplot(data = dataset_060, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -234,14 +234,14 @@ Conv_050_060 <- ggplot(data = dataset_060, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_060, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#ca663a") +
   geom_point(data = dataset_060, aes(x = PC1, y = PC2), col = "black", fill = "#ca663a", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_060)[1], "\n", "V   = ", "39.1%", sep = ""), fill = "#ca663a", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_060)[1], "\n", "V   = ", "60.9%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]50% – 60%]")
+  geom_label(label = paste("FE = ", dim(dataset_060)[1], "\n", "V   = ", "38.8%", sep = ""), fill = "#ca663a", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_060)[1], "\n", "V   = ", "61.2%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 50%")
 
 Conv_060_070 <- ggplot(data = dataset_070, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -249,14 +249,14 @@ Conv_060_070 <- ggplot(data = dataset_070, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_070, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#c85250") +
   geom_point(data = dataset_070, aes(x = PC1, y = PC2), col = "black", fill = "#c85250", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_070)[1], "\n", "V   = ", "38.3%", sep = ""), fill = "#c85250", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_070)[1], "\n", "V   = ", "61.7%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]60% – 70%]")
+  geom_label(label = paste("FE = ", dim(dataset_070)[1], "\n", "V   = ", "37.9%", sep = ""), fill = "#c85250", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_070)[1], "\n", "V   = ", "62.1%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 60%")
 
 Conv_070_080 <- ggplot(data = dataset_080, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -264,14 +264,14 @@ Conv_070_080 <- ggplot(data = dataset_080, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_080, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#ca3a3a") +
   geom_point(data = dataset_080, aes(x = PC1, y = PC2), col = "black", fill = "#ca3a3a", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_080)[1], "\n", "V   = ", "28.6%", sep = ""), fill = "#ca3a3a", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_080)[1], "\n", "V   = ", "71.4%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]70% – 80%]")
+  geom_label(label = paste("FE = ", dim(dataset_080)[1], "\n", "V   = ", "28.2%", sep = ""), fill = "#ca3a3a", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_080)[1], "\n", "V   = ", "71.8%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 70%")
 
 Conv_080_090 <- ggplot(data = dataset_090, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -279,14 +279,14 @@ Conv_080_090 <- ggplot(data = dataset_090, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_090, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#bd0909") +
   geom_point(data = dataset_090, aes(x = PC1, y = PC2), col = "black", fill = "#bd0909", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_090)[1], "\n", "V   = ", "22.2%", sep = ""), fill = "#bd0909", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_090)[1], "\n", "V   = ", "77.8%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]80% – 90%]")
+  geom_label(label = paste("FE = ", dim(dataset_090)[1], "\n", "V   = ", "22.7%", sep = ""), fill = "#bd0909", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_090)[1], "\n", "V   = ", "77.3%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 80%")
 
 Conv_090_100 <- ggplot(data = dataset_100, aes(x = PC1, y = PC2)) +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", alpha = 0.5, inherit.aes = F) +
@@ -294,13 +294,13 @@ Conv_090_100 <- ggplot(data = dataset_100, aes(x = PC1, y = PC2)) +
   geom_polygon(data = conv_hull_100, aes(x = PC1, y = PC2), alpha = .95, col = "black", fill = "#a20000") +
   geom_point(data = dataset_100, aes(x = PC1, y = PC2), col = "black", fill = "#a20000", size = 5, shape = 21) + theme_minimal() +  
   scale_x_continuous(name = "PC1", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.625, 0.35)) + 
+  scale_y_continuous(name = "PC2", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + scale_size_continuous(range = c(1,11), breaks = seq(1,11,1), limits = c(0, 11)) + 
   guides(size = guide_legend(nrow = 1)) + guides(fill = guide_legend(nrow = 3)) + 
   theme(legend.position = "bottom", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), axis.text = element_blank(),
         axis.title = element_text(size = 16), title = element_text(size = 14)) +
-  geom_label(label = paste("FE = ", dim(dataset_100)[1], "\n", "V   = ", "18.4%", sep = ""), fill = "#a20000", x = 0.155, y = -0.57, hjust = 0, size = 4) +
-  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_100)[1], "\n", "V   = ", "81.6%", sep = ""), fill = "white", x = -0.55, y = -0.57, hjust = 0, size = 4) +
-  ggtitle("]90% – 100%]")
+  geom_label(label = paste("FE = ", dim(dataset_100)[1], "\n", "V   = ", "19.1%", sep = ""), fill = "#a20000", x = 0.155, y = -0.44, hjust = 0, size = 4) +
+  geom_label(label = paste("FE = ", length(fe_nm) - dim(dataset_100)[1], "\n", "V   = ", "80.9%", sep = ""), fill = "white", x = -0.55, y = -0.44, hjust = 0, size = 4) +
+  ggtitle("> 90%")
 
 Figure_3 <- Base +  ((Conv_010_020 + Conv_020_030 + Conv_030_040) / (Conv_040_050 + Conv_050_060 + Conv_060_070) / (Conv_070_080 + Conv_080_090 + Conv_090_100))

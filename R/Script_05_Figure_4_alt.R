@@ -142,7 +142,6 @@ Figure_4B2 <- ggplot(data_heatmap_FE_biotic_summ, aes(year, drivers_biotic, fill
         axis.text.y = element_text(face="bold", size = 15),
         axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-
 ## Figure 4C
 data_heatmap_FE_all_summ     <- rbind((data_heatmap_FE_biotic %>% bind_rows())[,-1], (data_heatmap_FE_abiotic %>% bind_rows())[,-1]) %>% 
   data.frame() %>% distinct(., year, FE, PC1, PC2, PC3, PC4) %>% group_by(year) %>% summarise(n = n()) %>% mutate(ID = seq(1, 31, 1))
@@ -158,7 +157,7 @@ data_heatmap_FE_all_summ_sel <- c(data_heatmap_FE_all_summ_sel$ID)
 for (i in data_heatmap_FE_all_summ_sel) {V[i] = sqrt(round((cxhull::cxhull(data_heatmap_FE_all[[i]][,3:4] %>% distinct() %>% as.matrix())$volume / 
                                                               cxhull::cxhull(data_complete %>% dplyr::select(PC1, PC2) %>% distinct() %>% as.matrix())$volume) * 100, 2))}
 V <- V %>% data.frame() %>% mutate_all(., ~replace_na(.,0))
-data_heatmap_FE_all_summ <- data_heatmap_FE_all_summ %>% dplyr::select(year, n) %>% cbind(data_heatmap_FE_all_summ, Volume = V$.) %>% data.frame() %>% 
+data_heatmap_FE_all_summ <- data_heatmap_FE_all_summ %>% dplyr::select(year, n) %>% cbind(., Volume = V$.) %>% data.frame() %>% 
   full_join(data_to_fill, by = "year") %>% complete(year) %>% mutate(drivers_all = "Overall biotic &\nabiotic drivers")
 
 Figure_4C <- ggplot(data_heatmap_FE_all_summ, aes(year, drivers_all, fill= Volume)) + geom_tile(col = "black") + theme_bw() +

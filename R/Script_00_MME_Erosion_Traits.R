@@ -27,7 +27,7 @@ library(scales)
 library(rgeos)
 library(rgdal)
 library(mFD)
-library(sf) 
+library(sf)
 
 ## Functions and shapefiles
 `%notin%` <- Negate(`%in%`)
@@ -68,6 +68,6 @@ source("Script_07_Bayesian_Models_alt.R") # 181 lines
 ### Total number of lines:                 2849 lines
 
 ## Saving Figures
-ggsave(Figure_2, filename = "../Figures/raw/Figure_2.png"    , device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
-ggsave(Figure_3, filename = "../Figures/raw/Figure_3_alt.png", device = "png", width = 18.00, height = 10.0, units = "in", dpi = 300)
-ggsave(Figure_4, filename = "../Figures/raw/Figure_4_alt.png", device = "png", width = 18.00, height = 7.00, units = "in", dpi = 300)
+ggsave(Figure_2, filename = "../Figures/raw/Figure_2.png", device = "png", width = 18.00, height = 9.50, units = "in", dpi = 300)
+ggsave(Figure_3, filename = "../Figures/raw/Figure_3.png", device = "png", width = 18.00, height = 10.0, units = "in", dpi = 300)
+ggsave(Figure_4, filename = "../Figures/raw/Figure_4.png", device = "png", width = 18.00, height = 7.00, units = "in", dpi = 300)

@@ -41,10 +41,8 @@ Figure_5C1 <- ggplot(data_spatial_ws) + geom_rect(aes(xmin = -Inf, xmax = Inf, y
   geom_polygon(data = conv_hull_ws, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
   geom_point(data = data_spatial_ws, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
   scale_x_continuous(name = "", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.55, 0.42)) + 
+  scale_y_continuous(name = "", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() +
-#  geom_label(label = paste("FE = ", 44, "\n", "V   = ", "26.8%", sep = ""), fill = "#CC3399", x = 0.155, y = -0.49, hjust = 0, size = 4) +
-#  geom_label(label = paste("FE = ", length(fe_nm) - 44, "\n", "V   = ", "73.2%", sep = ""), fill = "white", x = -0.55, y = -0.49, hjust = 0, size = 4) +
   theme(legend.position = "none", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), 
         panel.grid = element_line(colour = NA), axis.text = element_blank()) 
 
@@ -53,22 +51,18 @@ Figure_5C2 <- ggplot(data_spatial_ct) + geom_rect(aes(xmin = -Inf, xmax = Inf, y
   geom_polygon(data = conv_hull_ct, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
   geom_point(data = data_spatial_ct, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
   scale_x_continuous(name = "", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.55, 0.42)) + 
+  scale_y_continuous(name = "", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   theme_minimal() + 
-#  geom_label(label = paste("FE = ", 33, "\n", "V   = ", "15.1%", sep = ""), fill = "#CC3399", x = 0.155, y = -0.49, hjust = 0, size = 4) +
-#  geom_label(label = paste("FE = ", length(fe_nm) - 33, "\n", "V   = ", "73.2%", sep = ""), fill = "white", x = -0.55, y = -0.49, hjust = 0, size = 4) +
   theme(legend.position = "none", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), 
         panel.grid = element_line(colour = NA), axis.text = element_blank()) 
 
 Figure_5C3 <- ggplot(data_spatial_es) + geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +
   scale_x_continuous(name = "", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
-  scale_y_continuous(name = "", breaks = seq(-0.5, 0.4, 0.9), limits = c(-0.55, 0.42)) + 
+  scale_y_continuous(name = "", breaks = seq(-0.5, 0.5, 1.0), limits = c(-0.5, 0.5)) + 
   geom_polygon(data = conv_hull_es, aes(x = PC1, y = PC2), alpha = .95, fill = "#CC3399", linewidth = 2, color = "#CC0099") +
   geom_point(data = data_spatial_es, aes(x = PC1, y = PC2), col = "black", fill = "#CC0099", size = 12, shape = 21) +
   theme_minimal() + 
-#  geom_label(label = paste("FE = ", 25, "\n", "V   = ", "15.2%", sep = ""), fill = "#CC3399", x = 0.155, y = -0.49, hjust = 0, size = 4) +
-#  geom_label(label = paste("FE = ", length(fe_nm) - 25, "\n", "V   = ", "73.2%", sep = ""), fill = "white", x = -0.55, y = -0.49, hjust = 0, size = 4) +
   theme(legend.position = "none", panel.border = element_rect(colour = "black", fill=NA, linewidth=1), 
         panel.grid = element_line(colour = NA), axis.text = element_blank()) 
 
@@ -350,7 +344,11 @@ length(dataset_western$FE)
 length(dataset_central$FE)
 length(dataset_eastern$FE)
 
-# Nimber of FE impaired per decade
+# Number of FE impaired per decade
 data_complete_impaired %>% mutate(species = Species) %>% left_join(MME_Merged_data) %>% group_by(year, FE) %>% distinct(year, FE) %>% 
   dplyr::filter(year < 2000, year >= 1990) %>% group_by(year) %>% summarise(FE = n()) %>% rbind(data.frame(year = c(1990, 1994), FE = c(0, 0))) %>% 
   summarise(mean = mean(FE), sd = sd(FE))
+
+# Impaired volume per decade
+Figure_4C$data %>% dplyr::mutate(Volume = replace_na(Volume, 0), Volume = Volume^2) %>% 
+  dplyr::filter(year < 2000, year >= 1990) %>% summarise(V = mean(Volume))
