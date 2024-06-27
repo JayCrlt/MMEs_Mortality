@@ -1,5 +1,157 @@
 Complete_traits <- read_excel("../Data/R/Complete_Traits.xlsx", sheet = "Sheet1", col_types = rep("text", 13)) %>% arrange(Species)
 
+### Figure S2 Post Review
+
+Figure_S2a <- Complete_traits %>% count(Feeding) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Feeding, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "Distribution of trait categories (%)", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2b <- Complete_traits %>% count(Longevity) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Longevity, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2c <- Complete_traits %>% count(Coloniality) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Coloniality, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2d <- Complete_traits %>% count(Morphology) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Morphology, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2e <- Complete_traits %>% count(Storage) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Storage, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2f <- Complete_traits %>% count(Energy) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Energy, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "Distribution of trait categories (%)", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2g <- Complete_traits %>% dplyr::filter(Size != 0) %>% 
+  count(Size) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Size, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2h <- Complete_traits %>% count(Growth) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Growth, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2i <- Complete_traits %>% count(Calcification) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Calcification, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2j <- Complete_traits %>% count(Motility) %>% mutate(percentage = n / sum(n) * 100) %>% 
+  ggplot(aes(x = reorder(Motility, -percentage), y = percentage)) +
+  geom_bar(stat = "identity", color = "black") + theme_classic() +
+  scale_x_discrete(name = "") + scale_y_continuous(name = "", limits = c(0,100)) +
+  theme(axis.text = element_text(size = 14),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Figure_S2 <- Figure_S2a + Figure_S2b + Figure_S2c + Figure_S2d + Figure_S2e +
+  Figure_S2f + Figure_S2g + Figure_S2h + Figure_S2i + Figure_S2j + plot_layout(ncol = 5)
+
 ## Clean Complete_traits
 # Check duplicate species
 Complete_traits$duplicate = NA ; for (i in 2:length(Complete_traits$duplicate)) {

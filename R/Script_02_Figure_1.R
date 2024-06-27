@@ -9,6 +9,17 @@ mypalette <- colorBin(palette = Fig_1_col, domain = unique(MME_Merged_data$damag
                fillColor = ~ mypalette(damaged_percentatge), fillOpacity = .5, color = "white", radius = ~sqrt(damaged_percentatge) * 4e3, stroke = F, weight = 1) %>%
     addLegend(pal = mypalette, values = ~damaged_percentatge, opacity = .9, title = "Damaged due to MMEs (%)", position = "topright" ))
 
+# Figure S1 Post Review
+MME_Merged_data_S1 <- MME_Merged_data %>% dplyr::filter(year >= 1986)
+mypalette <- colorBin(palette = Fig_1_col, domain = unique(MME_Merged_data_S1$year), 
+                      na.color = "transparent", bins = c(1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020))
+
+
+(Figure_S1 <- MME_Merged_data_S1 %>% leaflet(options = leafletOptions(attributionControl = F)) %>% addTiles() %>% 
+    setView(lat = 40, lng = 18 , zoom = 4) %>% addProviderTiles("Esri.WorldImagery") %>% addCircles(~longitude, ~latitude,  
+                                                                                                    fillColor = ~ mypalette(year), fillOpacity = .5, color = "white", radius = ~sqrt(year) * 8e2, stroke = F, weight = 1) %>%
+    addLegend(pal = mypalette, values = ~year, opacity = .9, title = "Range of year observed", position = "topright" ))
+
 # Figure 1 Part 2 Post review
 attributes(our_nc_data$var)
 attributes(our_nc_data$dim)
