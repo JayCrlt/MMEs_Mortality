@@ -35,6 +35,38 @@ conv_hull_ws    <- data_spatial_ws %>% data.frame %>% slice(chull(PC1, PC2))
 conv_hull_ct    <- data_spatial_ct %>% data.frame %>% slice(chull(PC1, PC2))
 conv_hull_es    <- data_spatial_es %>% data.frame %>% slice(chull(PC1, PC2))
 
+### Here we need an additional analysis to get the same sampling effort – Post review request
+data_mortality_from_complete_all_Review <- data_mortality_from_complete_all %>%
+  mutate(Region = case_when(
+    ecoregion %in% c("Alboran Sea", "Western Mediterranean") ~ "Western",
+    ecoregion %in% c("Adriatic Sea", "Ionian Sea", "Tunisian Plateau/Gulf of Sidra") ~ "Central",
+    ecoregion %in% c("Aegean Sea", "Levantine Sea") ~ "Eastern",
+    TRUE ~ NA_character_))
+
+bootstrap_number = 1000
+sampled_data = vector(mode = "list", length = bootstrap_number) 
+V_WS = vector(length = length(sampled_data)) ; V_CT = V_WS ; V_ES = V_WS
+FE_WS = vector(length = length(sampled_data)) ; FE_CT = FE_WS ; FE_ES = FE_WS
+for (i in 1:length(sampled_data)) {
+  sampled_data[[i]] <- data_mortality_from_complete_all_Review %>% 
+    group_by(Region) %>% sample_n(size = 100, replace = TRUE) %>% ungroup()
+  V_WS[i] <- round((cxhull::cxhull(sampled_data[[i]][201:300,10:13] %>% distinct() %>% as.matrix())$volume / VTot) * 100, 2)
+  V_CT[i] <- round((cxhull::cxhull(sampled_data[[i]][  1:100,10:13] %>% distinct() %>% as.matrix())$volume / VTot) * 100, 2)
+  V_ES[i] <- round((cxhull::cxhull(sampled_data[[i]][101:200,10:13] %>% distinct() %>% as.matrix())$volume / VTot) * 100, 2)
+  FE_WS[i] <- dim(unique(sampled_data[[i]][201:300,1]))[1]
+  FE_CT[i] <- dim(unique(sampled_data[[i]][  1:100,1]))[1]
+  FE_ES[i] <- dim(unique(sampled_data[[i]][101:200,1]))[1]
+}
+
+(Standardized_impaired_volume_WS = mean(V_WS)) ; (Standardized_impaired_volume_WS_sd = sd(V_WS))
+(Standardized_impaired_volume_CT = mean(V_CT)) ; (Standardized_impaired_volume_CT_sd = sd(V_CT)) 
+(Standardized_impaired_volume_ES = mean(V_ES)) ; (Standardized_impaired_volume_ES_sd = sd(V_ES))
+
+(Standardized_impaired_FE_WS = mean(FE_WS)) ; (Standardized_impaired_FE_WS_sd = sd(FE_WS)) 
+(Standardized_impaired_FE_CT = mean(FE_CT)) ; (Standardized_impaired_FE_CT_sd = sd(FE_CT)) 
+(Standardized_impaired_FE_ES = mean(FE_ES)) ; (Standardized_impaired_FE_ES_sd = sd(FE_ES))
+
+
 ### Figure 5C
 Figure_5C1 <- ggplot(data_spatial_ws) + geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill = "#deebf7", color = "NA", inherit.aes = F) +
   geom_polygon(data = conv_hull_tot, aes(x = PC1, y = PC2), alpha = .8, col = "black", fill = "white") +

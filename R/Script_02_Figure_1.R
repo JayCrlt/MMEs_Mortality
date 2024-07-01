@@ -20,6 +20,9 @@ mypalette <- colorBin(palette = Fig_1_col, domain = unique(MME_Merged_data_S1$ye
                                                                                                     fillColor = ~ mypalette(year), fillOpacity = .5, color = "white", radius = ~sqrt(year) * 8e2, stroke = F, weight = 1) %>%
     addLegend(pal = mypalette, values = ~year, opacity = .9, title = "Range of year observed", position = "topright" ))
 
+MME_Merged_data_S1 = MME_Merged_data_S1 %>% mutate(Decade = sapply(year, assign_decade))
+table(MME_Merged_data_S1$Decade)
+
 # Figure 1 Part 2 Post review
 attributes(our_nc_data$var)
 attributes(our_nc_data$dim)
