@@ -173,3 +173,79 @@ Figure_4 <- Figure_4A1 / plot_spacer() / Figure_4A2 / Figure_4B1 / plot_spacer()
   plot_layout(heights = c(5, -1.25, 1, 4, -1.25, 1, 1), guides = 'collect') & theme(legend.position = 'bottom') &
   colorspace::scale_fill_continuous_sequential(na.value = 'white', palette = "OrYel", begin = 0, end = 1, limits = c(0,6),
                                                name = "Trait volume affected \n(sqrt transformation) (%)")
+
+# Request reviewer round 2
+Supplementary_request_review_A <- MME_Merged_data %>% dplyr::filter(!is.na(publication_id) | !is.na(`Pub. Doi`)) %>%
+  mutate(study = paste(publication_id, `Pub. Doi`, sep = "_")) %>% dplyr::select(study, year) %>%
+  table() %>% as.data.frame() %>% dplyr::filter(Freq > 0) %>% group_by(year) %>% summarise(n = n()) %>% 
+  mutate(year = as.numeric(as.character(year))) %>% 
+  full_join(data.frame(year = seq(from = 1979, to = 2020, by = 1))) %>% dplyr::filter(year > 1985) %>% 
+  ggplot(aes(x = year, y = as.numeric(n))) + 
+  geom_col(color = "black") + theme_bw() + scale_y_continuous(name = "Number of studies", breaks = seq(0, 60, 5)) + 
+  scale_x_continuous(name = "", breaks = seq(1980, 2020, 5)) +
+  theme(axis.text.x = element_text(size = 14, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 14),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+Supplementary_request_review_B <- MME_Merged_data %>% dplyr::select(year) %>%
+  table() %>% as.data.frame() %>% dplyr::filter(Freq > 0) %>% group_by(year) %>% 
+  mutate(year = as.numeric(as.character(year))) %>% 
+  full_join(data.frame(year = seq(from = 1979, to = 2020, by = 1))) %>% dplyr::filter(year > 1985) %>% 
+  ggplot(aes(x = year, y = as.numeric(Freq))) + 
+  geom_col(color = "black") + theme_bw() + scale_y_continuous(name = "Number of mortality records", breaks = seq(0, 400, 50)) + 
+  scale_x_continuous(name = "", breaks = seq(1980, 2020, 5)) +
+  theme(axis.text.x = element_text(size = 14, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 14),
+        axis.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.text = element_blank(), 
+        strip.background = element_blank(),
+        legend.position = "none")
+
+assign_decade <- function(year) {
+  if (year >= 1986 & year <= 1991) { return("1986-1990")
+  } else if (year > 1991 & year <= 2000) { return("1991-2000")
+  } else if (year > 2001 & year <= 2010) { return("2001-2010")
+  } else { return("2011-2020")}}
+data_complete_all  <- data_complete_all %>% drop_na(year) %>% mutate(Decade = sapply(year, assign_decade))
+table(data_complete_all$Decade)
+V_results = matrix(NA, nrow = 1000, ncol = length(unique(data_complete_all$Decade))) ; for (j in 1:1000) { 
+  data_random_sample <- data_complete_all %>% group_by(Decade) %>% slice_sample(n = 100, replace = FALSE) %>% group_split()
+  V = vector("numeric", length(unique(data_complete_all$Decade))) 
+  for (i in 1:length(unique(data_complete_all$Decade))) {  
+    data_random_sample[[i]] = data_random_sample[[i]] %>% distinct(year, FE, PC1, PC2, PC3, PC4) %>% data.frame() %>%
+      dplyr::select(year, FE, PC1, PC2, PC3, PC4)
+    V[i] = round((cxhull::cxhull(data_random_sample[[i]][, 2:5] %>% distinct() %>% as.matrix())$volume / VTot) * 100, 4)}
+  V_results[j, ] = V}
+V_results_agg = data.frame(numeric = rep(c(1, 2, 3, 4), each = 1000),
+                           Decade  = rep(c("1986-1990", "1991-2000", "2001-2010", "2011-2020"), each = 1000),
+                           Volume  = c(V_results[,1], V_results[,2], V_results[,3], V_results[,4]))
+
+Supplementary_request_review_C_means = data.frame(decade  = c("1986-1990", "1991-2000", "2001-2010", "2011-2020"),
+                                                  numeric = seq(1,4),
+                                                  V_mean  = apply(V_results, 2, mean, na.rm = TRUE),
+                                                  V_sd    = apply(V_results, 2, sd, na.rm = TRUE))
+model_summary <- broom::glance(lm(V_mean ~ log(numeric) + 0, data = Supplementary_request_review_C_means))
+
+Supplementary_request_review_C <- ggplot(Supplementary_request_review_C_means, aes(x = numeric, y = V_mean)) +
+  geom_jitter(data = V_results_agg, aes(x = numeric, y = Volume), width = 0.1, alpha = 0.1, shape = 21, color = "black", fill = "gray30") +
+  geom_point(size = 2, fill = "firebrick3", color = "black", shape = 21) +
+  geom_smooth(method = "lm", color = "firebrick4", fill = "firebrick3", se = TRUE, formula = 'y ~ log(x) + 0') + 
+  scale_y_continuous(name = "Affected trait volume\n with homogeneous effort", breaks = seq(0, 40, 5), limits = c(0, 40)) + 
+  scale_x_continuous(name = "", breaks = seq(1, 4, 1), 
+                     labels = c("1986–\n1990", "1991–\n2000", "2001–\n2010", "2011–\n2020")) + theme_bw() +
+  annotate("text", x = 1.45, y = 38.75, label = paste("R² =", round(model_summary$r.squared, 2)), size = 5, color = "black") +
+  theme(axis.text.x = element_text(size = 14, angle = 0, hjust = 0.5),
+        axis.text.y = element_text(size = 14),
+        axis.title = element_text(size = 16),
+        panel.border = element_rect(color = "black", fill = NA, size = 1))
+
+Figure_S4 <- Supplementary_request_review_A + Supplementary_request_review_B + Supplementary_request_review_C

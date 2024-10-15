@@ -36,8 +36,8 @@ assign_decade <- function(year) {
   } else if (year > 1991 & year <= 1996) { return("1991-1995")
   } else if (year > 1996 & year <= 2001) { return("1996-2000")
   } else if (year > 2001 & year <= 2006) { return("2001-2005")
-  } else if (year > 2006 & year <= 2011) { return("2006-2015")
-  } else if (year > 2011 & year <= 2016) { return("2011-2010")
+  } else if (year > 2006 & year <= 2011) { return("2006-2010")
+  } else if (year > 2011 & year <= 2016) { return("2011-2015")
   } else { return("2016-2020")}}
 
 ## My color palettes
@@ -80,3 +80,4 @@ ggsave(Figure_2,  filename = "../Figures/raw/Figure_2.png",  device = "png", wid
 ggsave(Figure_3,  filename = "../Figures/raw/Figure_3.png",  device = "png", width = 18.00, height = 10.0, units = "in", dpi = 300)
 ggsave(Figure_4,  filename = "../Figures/raw/Figure_4.png",  device = "png", width = 18.00, height = 7.00, units = "in", dpi = 300)
 ggsave(Figure_S2, filename = "../Figures/raw/Figure_S2.png", device = "png", width = 18.00, height = 8.00, units = "in", dpi = 300)
+ggsave(Figure_S4, filename = "../Figures/raw/Figure_S4.png", device = "png", width = 12.00, height = 4.00, units = "in", dpi = 300)
