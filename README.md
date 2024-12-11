@@ -1,4 +1,4 @@
-# Erosion of trait diversity across the Mediterranean Sea following mortality events
+# Vulnerability of benthic trait diversity across the Mediterranean Sea following Mass Mortality Events
 
 ![GitHub](https://img.shields.io/badge/GitHub-39457E?style=for-the-badge&logo=github&logoColor=white)
 ![Gitlab](https://img.shields.io/badge/GitLab-FFA500?style=for-the-badge&logo=gitlab&logoColor=white)
