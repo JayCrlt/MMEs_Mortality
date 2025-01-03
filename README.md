@@ -28,10 +28,10 @@ Mortality data have been acquired from the [T-MEDNetplatform](https://t-mednet.o
 - `Script_01_Cleaning_data.R` is used to prepare the data to be analyzed
 - `Script_02_Figure_1.R` is used to map the MMEs across the Mediterranean Sea
 - `Script_03_Figure_2.R` is used to look at the affected trait distribution among MMEs
-- `Script_04_Figure_3_alt.R` is used to plot the affected trait hypervolume in Mediterranean benthic communities
+- `Script_04_Figure_3_alt.R` is used to plot the affected trait hypervolume among benthic communities
 - `Script_05_Figure_4_alt.R` is used to quantify how stressors impair MMEs over time
 - `Script_06_Figure_5_alt.R` is used to quantify how MMEs are impaired spatially
-- `Script_07_Bayesian_Models_alt.R` is used to performed all the bayesian models refered in the manuscript.
+- `Script_07_Bayesian_Models_alt.R` is used to perform all the bayesian models refered in the study.
 
 ### Machine parameters
 This analyze has been launched with the following machine parameters
