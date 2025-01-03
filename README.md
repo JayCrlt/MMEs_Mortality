@@ -10,16 +10,32 @@
 ### Abstract
 Unraveling the functional future of marine ecosystems amid global change poses a pressing challenge. This is particularly critical in the Mediterranean Sea, which is highly impacted by global and local drivers. Utilizing extensive mass mortality events (MMEs) datasets spanning from 1986 to 2020 across the Mediterranean Sea, we investigated the trait vulnerability of benthic species that suffered from MMEs induced by nine distinct mortality drivers. By analyzing changes in ten ecological traits across 389 benthic species – constituting an extensive compendium of Mediterranean ecological traits to date – we identified 228 functional entities (FEs), defined as groups of species sharing the same trait values. Our findings indicate that of these 55 FEs were impacted by MMEs, accentuating a heightened vulnerability within specific trait categories. Notably, more than half of the mortality records showed severe impacts on calcifying and larger species with slower growth which mostly account for tree-like and massive forms. Altogether, we highlight that 29 FEs suffered extreme mortality, leading to a maximum increase of 19.1% of the global trait volume vulnerability over 35 years. We also reveal that 10.8% of the trait volume may have been temporarily lost over the last five years, emphasizing the risk of a rapid ecological transformation in the Mediterranean Sea.
 
-Scripts and data for Erosion of trait diversity across the Mediterranean Sea following mortality events 
+### Repository structure
 This Github repository is structured as follows:
 
-- :file_folder: [``Data``](https://github.com/JayCrlt/MMEs_Mortality/tree/master/Data) contains the following sub-folders
-- :file_folder: [``Figures``](https://github.com/JayCrlt/MMEs_Mortality/tree/master/Figures) which hosts the figures built with this script
-- :file_folder: [``Models``](https://github.com/JayCrlt/MMEs_Mortality/tree/master/Models) which hosts the models built with this script
-- :file_folder: [``R``](https://github.com/JayCrlt/MMEs_Mortality/tree/master/Data/R) contains the current script and R project related to 
+- :file_folder: [``Data``](https://github.com/JayCrlt/MMEs_Mortality/Data) contains the following sub-folders
+- :file_folder: [``Figures``](https://github.com/JayCrlt/MMEs_Mortality/Figures) which hosts the figures built with this script
+- :file_folder: [``Models``](https://github.com/JayCrlt/MMEs_Mortality/Models) which hosts the models built with this script
+- :file_folder: [``R``](https://github.com/JayCrlt/MMEs_Mortality/Data/R) contains the current script and R project related to 
 
-:warning: You might run only the script [``Script_00_MME_Erosion_Traits.R``](https://github.com/JayCrlt/MMEs_Mortality/blob/master/R/Script_00_MME_Erosion_Traits.R) which is the control tower of this study. It will source automatically the following scripts (see R folder).
-If you want to look at a specific code, the scripts are numbered according to the figure/analyse you are interested in. 
+### Data and Code in brief
+#### Data
+
+Mortality data have been acquired from the [T-MEDNetplatform](https://t-mednet.org/mass-mortality/mass-mortality-events), from [Garrabou et al., 2023](https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.16301); and a literature review from this article. This data has been compiled in a single document and has been stored [`here`](https://github.com/JayCrlt/MMEs_Mortality/Data/R/MME-Review%20data.xlsx). Benthic trait data have been acquired from [Teixido et al., 2024](https://onlinelibrary.wiley.com/doi/10.1111/gcb.17105), [Golo et al., 2024](https://tesisenred.net/handle/10803/692268), [Galobart et al., 2023](https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2023.1176655/full) and [Gomez-Gras et al., 2021](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.13718). This data has been compiled in a single document and has been stored [`here`](https://github.com/JayCrlt/MMEs_Mortality/Data/R/Complete_Traits.xlsx).
+
+#### Code
+
+:warning: You might run only the script [``Script_00_MME_Erosion_Traits.R``](https://github.com/JayCrlt/MMEs_Mortality/R/Script_00_MME_Erosion_Traits.R) which is the control tower of this study. It will source automatically the following scripts (see R folder). If you want to look at a specific code, the scripts are numbered according to the figure/analyse you are interested in. 
+
+- `Script_01_Cleaning_data.R` is used to prepare the data to be analyzed
+- `Script_02_Figure_1.R` is used to map the MMEs across the Mediterranean Sea
+- `Script_03_Figure_2.R` is used to look at the affected trait distribution among MMEs
+- `Script_04_Figure_3_alt.R` is used to plot the affected trait hypervolume in Mediterranean benthic communities
+- `Script_05_Figure_4_alt.R` is used to quantify how stressors impair MMEs over time
+- `Script_06_Figure_5_alt.R` is used to quantify how MMEs are impaired spatially
+- `Script_07_Bayesian_Models_alt.R` is used to performed all the bayesian models refered in the manuscript.
+
+#### Machine parameters
 
 This analyze has been launched with the following machine parameters
 
